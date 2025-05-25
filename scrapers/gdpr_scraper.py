@@ -10,10 +10,7 @@ SITEMAP_URL  = "https://gdpr-info.eu/page-sitemap.xml"
 OUTPUT_FILE  = "gdpr_articles.json"
 
 def clean_text(text):
-    """
-    Clean text by removing special characters and normalizing whitespace.
-    Keep only alphanumeric characters, basic punctuation, and spaces.
-    """
+    # Clean text by removing special characters and normalizing whitespace.
     if not text:
         return ""
     
@@ -30,10 +27,6 @@ def clean_title(title):
         return ""
     
     # Remove various "Art/Article X GDPR" patterns from the beginning
-    # This handles patterns like:
-    # - "Art. X GDPR", "Art X GDPR", "Article X GDPR"  
-    # - With optional separators like "-", ":", etc.
-    # - With optional spaces
     patterns_to_remove = [
         r'^Art\.?\s*\d+\s*[-:]?\s*GDPR\s*[-:]?\s*',  # Art. 16 GDPR, Art 16 - GDPR, etc.
         r'^Article\s*\d+\s*[-:]?\s*GDPR\s*[-:]?\s*',  # Article 16 GDPR, Article 16 - GDPR, etc.

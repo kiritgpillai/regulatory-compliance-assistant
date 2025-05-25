@@ -1,0 +1,176 @@
+[
+  {
+    "query": "What are the GDPR requirements for data breach notification?",
+    "internal_citations": [
+      {
+        "title": "Communication of a personal data breach to the data subject",
+        "excerpt": "When the personal data breach is likely to result in a high risk to the rights and freedoms of natural persons, the controller shall communicate the personal data breach to the data subject without undue delay. The communication to the data subject referred to in paragraph 1 of this Article shall describe in clear and plain language the nature of the personal data breach and contain at least the information and measures referred to in points (b), (c) and (d) of Article 33 (3). The communication ...",
+        "source_url": "N/A",
+        "standard": "gdpr",
+        "article_number": "34",
+        "document_type": "general",
+        "score": 0.669631183
+      },
+      {
+        "title": "Notification of a personal data breach to the supervisory authority",
+        "excerpt": "1 In the case of a personal data breach, the controller shall without undue delay and, where feasible, not later than 72 hours after having become aware of it, notify the personal data breach to the supervisory authority competent in accordance with Article 55 , unless the personal data breach is unlikely to result in a risk to the rights and freedoms of natural persons. 2 Where the notification to the supervisory authority is not made within 72 hours, it shall be accompanied by reasons for the ...",
+        "source_url": "N/A",
+        "standard": "gdpr",
+        "article_number": "33",
+        "document_type": "general",
+        "score": 0.669498205
+      },
+      {
+        "title": "Notification obligation regarding rectification or erasure of personal data or restriction of processing",
+        "excerpt": "1 The controller shall communicate any rectification or erasure of personal data or restriction of processing carried out in accordance with Article 16 , Article 17 (1) and Article 18 to each recipient to whom the personal data have been disclosed, unless this proves impossible or involves disproportionate effort. 2 The controller shall inform the data subject about those recipients if the data subject requests it. Suitable Recitals ( 66 ) Right to be Forgotten",
+        "source_url": "N/A",
+        "standard": "gdpr",
+        "article_number": "19",
+        "document_type": "general",
+        "score": 0.575489104
+      }
+    ],
+    "external_citations": [
+      {
+        "title": "Regulatory Reference: regulations",
+        "date": null,
+        "url": "https://www.sec.gov/search?query=regulations",
+        "type": "Regulatory Reference"
+      },
+      {
+        "title": "Regulatory Reference: Regulation S",
+        "date": null,
+        "url": "https://www.sec.gov/search?query=Regulation+S",
+        "type": "Regulatory Reference"
+      }
+    ],
+    "hints": {
+      "basic_hints": [
+        "Consider reviewing GDPR Article 6 for lawful basis requirements",
+        "Check data processing agreements with third parties",
+        "Verify data retention and deletion procedures"
+      ],
+      "next_step_hint": "Review the EU's GDPR guidelines and the latest updates on breach notification timelines, which have been reduced to 48 hours for critical sectors like healthcare, to ensure compliance with the new regulations[3][5]. Consult legal counsel or a GDPR expert for tailored advice on implementing these requirements within your organization.",
+      "query": "What are the GDPR requirements for data breach notification?"
+    },
+    "summary": {
+      "internal_count": 3,
+      "external_count": 2,
+      "total_citations": 5
+    }
+  },
+  {
+    "query": "What are the SOX requirements for financial reporting and internal controls?",
+    "internal_citations": [
+      {
+        "title": "Section 404: MANAGEMENT ASSESSMENT OF INTERNAL CONTROLS.",
+        "excerpt": "(a) RULES REQUIRED.\u2014The Commission shall prescribe rules requiring each annual report required by section 13(a) or 15(d) of the Securities Exchange Act of 1934 (15 U.S.C. 78m or 78o(d)) to contain an internal control report, which shall\u2014 (1) state the responsibility of management for establishing and maintaining an adequate internal control structure and procedures for financial reporting; and (2) contain an assessment, as of the end of the most recent fiscal year of the issuer, of the effective...",
+        "source_url": "N/A",
+        "standard": "sox",
+        "article_number": "4",
+        "document_type": "general",
+        "score": 0.674990118
+      },
+      {
+        "title": "Section 302: CORPORATE RESPONSIBILITY FOR FINANCIAL REPORTS.",
+        "excerpt": "(a) REGULATIONS REQUIRED.\u2014The Commission shall, by rule, require, for each company filing periodic reports under section 13(a) or 15(d) of the Securities Exchange Act of 1934 (15 U.S.C. 78m, 78o(d)), that the principal executive officer or officers and the prin- cipal financial officer or officers, or persons performing similar functions, certify in each annual or quarterly report filed or sub- mitted under either such section of such Act that\u2014 (1) the signing officer has reviewed the report; (2...",
+        "source_url": "N/A",
+        "standard": "sox",
+        "article_number": "3",
+        "document_type": "general",
+        "score": 0.624928057
+      },
+      {
+        "title": "Section 103: AUDITING, QUALITY CONTROL, AND INDEPENDENCE STAND-",
+        "excerpt": "ARDS AND RULES. (a) AUDITING, QUALITY CONTROL, AND ETHICS STANDARDS.\u2014 (1) IN GENERAL.\u2014The Board shall, by rule, establish, including, to the extent it determines appropriate, through adoption of standards proposed by 1 or more professional groups of accountants designated pursuant to paragraph (3)(A) or advisory groups convened pursuant to paragraph (4), and amend or otherwise modify or alter, such auditing and related attestation standards, such quality control standards, and such ethics standa...",
+        "source_url": "N/A",
+        "standard": "sox",
+        "article_number": "1",
+        "document_type": "general",
+        "score": 0.590210855
+      }
+    ],
+    "external_citations": [
+      {
+        "title": "Regulatory Reference: Regulations",
+        "date": null,
+        "url": "https://www.sec.gov/search?query=Regulations",
+        "type": "Regulatory Reference"
+      },
+      {
+        "title": "Regulatory Reference: regulation that",
+        "date": null,
+        "url": "https://www.sec.gov/search?query=regulation+that",
+        "type": "Regulatory Reference"
+      }
+    ],
+    "hints": {
+      "basic_hints": [
+        "Evaluate internal controls over financial reporting",
+        "Review auditor attestation requirements",
+        "Consider management assessment procedures"
+      ],
+      "next_step_hint": "Review Section 302 and 404 requirements in your company\u2019s SOX documentation, then ensure your internal controls and financial reporting processes are mapped to these standards for compliance verification[1][2][4].",
+      "query": "What are the SOX requirements for financial reporting and internal controls?"
+    },
+    "summary": {
+      "internal_count": 3,
+      "external_count": 2,
+      "total_citations": 5
+    }
+  },
+  {
+    "query": "How should we handle cross-border data transfers under GDPR?",
+    "internal_citations": [
+      {
+        "title": "Transfers subject to appropriate safeguards",
+        "excerpt": "In the absence of a decision pursuant to Article 45 (3), a controller or processor may transfer personal data to a third country or an international organisation only if the controller or processor has provided appropriate safeguards, and on condition that enforceable data subject rights and effective legal remedies for data subjects are available. The appropriate safeguards referred to in paragraph 1 may be provided for, without requiring any specific authorisation from a supervisory authority,...",
+        "source_url": "N/A",
+        "standard": "gdpr",
+        "article_number": "46",
+        "document_type": "general",
+        "score": 0.618989944
+      },
+      {
+        "title": "Transfers on the basis of an adequacy decision",
+        "excerpt": "1 A transfer of personal data to a third country or an international organisation may take place where the Commission has decided that the third country, a territory or one or more specified sectors within that third country, or the international organisation in question ensures an adequate level of protection. 2 Such a transfer shall not require any specific authorisation. When assessing the adequacy of the level of protection, the Commission shall, in particular, take account of the following ...",
+        "source_url": "N/A",
+        "standard": "gdpr",
+        "article_number": "45",
+        "document_type": "general",
+        "score": 0.593190074
+      },
+      {
+        "title": "Right of access by the data subject",
+        "excerpt": "The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and the following information: the purposes of the processing; the categories of personal data concerned; the recipients or categories of recipient to whom the personal data have been or will be disclosed, in particular recipients in third countries or international organisations; wh...",
+        "source_url": "N/A",
+        "standard": "gdpr",
+        "article_number": "15",
+        "document_type": "general",
+        "score": 0.583283901
+      }
+    ],
+    "external_citations": [
+      {
+        "title": "Regulatory Reference: regulations",
+        "date": null,
+        "url": "https://www.sec.gov/search?query=regulations",
+        "type": "Regulatory Reference"
+      }
+    ],
+    "hints": {
+      "basic_hints": [
+        "Consider reviewing GDPR Article 6 for lawful basis requirements",
+        "Check data processing agreements with third parties",
+        "Verify data retention and deletion procedures"
+      ],
+      "next_step_hint": "To handle cross-border data transfers under GDPR, review the mechanisms for ensuring adequate protection, such as adequacy decisions, standard contractual clauses (SCCs), and binding corporate rules (BCRs), and ensure you maintain detailed records of transfers[3][5]. Consult legal counsel for tailored advice on implementing these measures in your specific context.",
+      "query": "How should we handle cross-border data transfers under GDPR?"
+    },
+    "summary": {
+      "internal_count": 3,
+      "external_count": 1,
+      "total_citations": 4
+    }
+  }
+]

@@ -3,6 +3,7 @@ import logging
 from typing import List, Dict, Optional
 from pinecone import Pinecone, Index
 from sentence_transformers import SentenceTransformer
+import dotenv
 import time
 
 # Set up logging
@@ -18,7 +19,7 @@ class RAGModule:
         self.initialization_error = None
     
     def initialize(self, api_key: str = None, environment: str = None):
-        """Initialize the RAG module with Pinecone and SentenceTransformers embeddings."""
+        # Initialize the RAG module with Pinecone and SentenceTransformers embeddings.
         try:
             logger.info("Starting RAG module initialization...")
             
@@ -58,7 +59,6 @@ class RAGModule:
             # Don't raise the exception, just log it and mark as not initialized
     
     def _connect_to_index(self, index_name: str, max_retries: int = 3) -> Index:
-        """Connect to an existing Pinecone index with retry logic."""
         for attempt in range(max_retries):
             try:
                 logger.info(f"Attempting to connect to index '{index_name}' (attempt {attempt + 1}/{max_retries})")
@@ -102,7 +102,6 @@ class RAGModule:
         raise Exception("Failed to connect to index after all retries")
     
     def _generate_embedding(self, text: str) -> List[float]:
-        """Generate embedding for a text using SentenceTransformers."""
         if not self.embeddings_model:
             raise RuntimeError("Embeddings model not initialized")
         
@@ -113,8 +112,8 @@ class RAGModule:
             logger.error(f"Error generating embedding: {e}")
             raise
     
-    def query_rag_system(self, query: str, top_k: int = 3) -> List[Dict]:
-        """Query the RAG system and return top relevant documents."""
+    async def query_rag_system(self, query: str, top_k: int = 3) -> List[Dict]:
+        # Query the RAG system and return top relevant documents.
         if not self.initialized:
             logger.warning("RAG module not initialized, returning empty results")
             if self.initialization_error:
@@ -141,11 +140,15 @@ class RAGModule:
             citations = []
             for match in results.matches:
                 metadata = match.metadata or {}
+                # Get the source URL from the Pinecone record
+                source_url = metadata.get("url", metadata.get("source_url", "N/A"))
+                
                 citations.append({
                     "title": metadata.get("title", "N/A"),
-                    "excerpt": metadata.get("excerpt", "No excerpt available."),
-                    "source_url": metadata.get("source_url", "N/A"),
-                    "standard": metadata.get("standard", "unknown"),
+                    "excerpt": metadata.get("excerpt", metadata.get("content", "No excerpt available.")[:200] + "..."),
+                    "source": source_url,  # Source field using the URL from Pinecone record
+                    "source_type": "Internal Database",
+                    "standard": metadata.get("standard", "unknown").upper(),
                     "article_number": metadata.get("article_number", "N/A"),
                     "document_type": metadata.get("document_type", "general"),
                     "score": match.score  # Include score for debugging/analysis
@@ -159,11 +162,9 @@ class RAGModule:
             return []  # Return empty list on error
     
     def process_query(self, query: str) -> List[Dict]:
-        """Process a query using RAG functionality."""
         return self.query_rag_system(query)
     
     def get_index_stats(self) -> Dict:
-        """Get index statistics for monitoring."""
         if not self.initialized or not self.index:
             return {"error": "RAG module not initialized or index not available"}
         
@@ -180,7 +181,6 @@ class RAGModule:
             return {"error": str(e)}
     
     def get_status(self) -> Dict:
-        """Get detailed status information for debugging."""
         status = {
             "initialized": self.initialized,
             "has_embeddings_model": self.embeddings_model is not None,

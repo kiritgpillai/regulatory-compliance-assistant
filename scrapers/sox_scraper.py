@@ -3,14 +3,14 @@ import re
 import json
 import time
 import requests
-import fitz  # PyMuPDF
+import fitz  
 
 PDF_URL     = "https://www.govinfo.gov/content/pkg/PLAW-107publ204/pdf/PLAW-107publ204.pdf"
 PDF_PATH    = "sox.pdf"
 OUTPUT_FILE = "sox_sections.json"
 
 def download_pdf():
-    """Download the SOX PDF from govinfo if not already present."""
+    # Download the SOX PDF from govinfo if not already present.
     if not os.path.exists(PDF_PATH):
         print(f"[+] Downloading SOX from {PDF_URL} …")
         resp = requests.get(PDF_URL)
@@ -40,7 +40,6 @@ def extract_full_text(pdf_path):
 
 def clean_content(content):
     # Clean the extracted content by removing formatting artifacts and normalizing whitespace.
-    # Remove page headers/footers and formatting artifacts
     lines = content.split('\n')
     cleaned_lines = []
     

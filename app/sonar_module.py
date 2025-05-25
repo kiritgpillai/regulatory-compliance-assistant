@@ -3,8 +3,12 @@ import re
 import logging
 import asyncio
 import aiohttp
+import dotenv
 from typing import List, Dict, Optional
 from tenacity import retry, stop_after_attempt, wait_exponential
+
+# Load environment variables 
+dotenv.load_dotenv()
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -56,23 +60,49 @@ class SonarModule:
         
         normalized_citations = []
         
-        # Enhance query for compliance-focused search
-        enhanced_query = f"{query} SEC GDPR SOX compliance regulations legal requirements"
-        
+        # Enhance query for compliance-focused search with specific guidance request
+        enhanced_query = (
+            f"{query}. Provide specific legal guidance, exact citations, and implementation context."
+            " The response must include:"
+            " 1. The exact title and number of any relevant regulatory articles, sections, or clauses (e.g., GDPR Article 33, SOX Section 302, HIPAA §164.308)."
+            " 2. The full text excerpt or summary of the requirement from the regulation."
+            " 3. A URL linking to the official regulation or government publication (e.g., gdpr-info.eu, govinfo.gov, ec.europa.eu, ftc.gov, edpb.europa.eu, oag.ca.gov, sec.gov)."
+            " 4. Real-world implementation advice (e.g., what organizations typically do to comply)."
+            " 5. Notable enforcement actions, penalties, or compliance rulings if available."
+            " 6. Clearly indicate which jurisdiction(s) the regulation applies to (e.g., EU, US, global)."
+            " 7. If multiple regulations are relevant, list each with its associated guidance."
+            " Avoid vague summaries, news articles, or blog posts unless they cite or link to authoritative regulatory documents."
+        )
+
         payload = {
             "model": model,
             "messages": [
                 {
-                    "role": "system", 
-                    "content": "You are a helpful assistant that finds compliance documents and citations from the web. Focus on SEC, GDPR, SOX, and other regulatory compliance information."
+                    "role": "system",
+                    "content": (
+                        "You are an expert compliance and legal research assistant trained in analyzing and citing complex regulatory frameworks. "
+                        "Your job is to help compliance teams, auditors, and legal analysts retrieve specific, actionable information about regulatory obligations. "
+                        "You must prioritize official sources from government websites and regulatory bodies, such as EU Commission, SEC, FTC, EDPB, U.S. Congress, NIST, or ISO. "
+                        "Each answer must include article or section numbers, plain-language interpretation, enforcement history (if available), and practical steps companies have taken to meet compliance."
+                        "\n\n"
+                        "Always ensure:"
+                        "- Every citation is tied to a named law or regulation (e.g., GDPR, SOX, HIPAA, CCPA, PCI DSS)."
+                        "- You include only reliable links from government or regulator-hosted sources."
+                        "- You mention the applicable jurisdictions (e.g., EU, California, U.S. federal)."
+                        "- You clarify what is **required by law**, what is **recommended guidance**, and what is **industry best practice**."
+                        "- You structure the output in a way that supports easy parsing and indexing in compliance tools (e.g., RAG pipelines)."
+                        "\n\n"
+                        "DO NOT answer with speculative advice, general blogs, or unverified interpretations. You must be exact, legally accurate, and citation-focused."
+                    )
                 },
                 {
-                    "role": "user", 
+                    "role": "user",
                     "content": enhanced_query
                 }
             ],
-            "stream": False  # We want a complete response for parsing citations
+            "stream": False
         }
+
         
         try:
             data = await self._make_api_request(payload)

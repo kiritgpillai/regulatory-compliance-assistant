@@ -1,3 +1,1 @@
-"""
-Regulatory Compliance Assistant
-""" 
+# Regulatory Compliance Assistant 

@@ -346,6 +346,43 @@ async def root():
         }
     }
 
+# Add GET versions of endpoints as specified in the project requirements
+@app.get("/query")
+async def get_query(
+    text: str,
+    use_rag: bool = True,
+    use_sonar: bool = True,
+    use_hints: bool = True,
+    load_sample_data: bool = False
+):
+    # GET version of the query endpoint for simple URL-based queries.
+    query = Query(
+        text=text,
+        use_rag=use_rag,
+        use_sonar=use_sonar,
+        use_hints=use_hints,
+        load_sample_data=load_sample_data
+    )
+    return await process_query(query)
+
+@app.get("/chat")
+async def get_chat(
+    text: str,
+    use_rag: bool = True,
+    use_sonar: bool = True,
+    use_hints: bool = True,
+    load_sample_data: bool = False
+):
+    # GET version of the chat endpoint for simple URL-based streaming.
+    query = Query(
+        text=text,
+        use_rag=use_rag,
+        use_sonar=use_sonar,
+        use_hints=use_hints,
+        load_sample_data=load_sample_data
+    )
+    return await chat_endpoint(query)
+
 @app.get("/debug")
 async def debug_status():
     return {

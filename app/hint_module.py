@@ -68,13 +68,27 @@ class HintModule:
                     context_text += f"- {cite.get('title', 'N/A')} ({cite.get('type', 'N/A')}): {cite.get('url', 'N/A')}\n"
                 context_text += "\n"
             
+            # Create query-specific prompt
+            query_keywords = user_query.lower()
+            if "breach" in query_keywords:
+                context_focus = "breach notification procedures, timelines, and reporting requirements"
+            elif "transfer" in query_keywords or "cross-border" in query_keywords:
+                context_focus = "data transfer mechanisms, adequacy decisions, and safeguards"
+            elif "sox" in query_keywords and ("reporting" in query_keywords or "control" in query_keywords):
+                context_focus = "internal controls implementation, documentation, and testing procedures"
+            elif "consent" in query_keywords:
+                context_focus = "consent mechanisms, withdrawal procedures, and documentation"
+            else:
+                context_focus = "implementation requirements and compliance procedures"
+            
             prompt_content = (
-                f"Given the following user query and relevant citations:\n\n"
+                f"Query: {user_query}\n\n"
                 f"{context_text}"
-                f"Based on this information, provide a single, very short (1-2 sentences) and actionable 'next step' hint. "
-                f"Focus on what the user should do next to gain more clarity or take action. "
-                f"Examples: 'Review the full policy document for implementation details.' or 'Consult legal counsel for specific compliance requirements.'\n\n"
-                f"Next Step Hint:"
+                f"Focusing specifically on {context_focus}, provide ONE actionable next step (1-2 sentences) "
+                f"that addresses the specific query. Be concrete and implementation-focused. "
+                f"Examples: 'Draft a breach response plan with 72-hour notification timeline.' or "
+                f"'Implement SOC 1 Type II controls for financial reporting systems.'\n\n"
+                f"Specific Next Step:"
             )
             
             payload = {
@@ -115,11 +129,24 @@ class HintModule:
         query_lower = query.lower()
         
         if any(keyword in query_lower for keyword in ['gdpr', 'data protection', 'privacy']):
-            hints.extend([
-                "Consider reviewing GDPR Article 6 for lawful basis requirements",
-                "Check data processing agreements with third parties",
-                "Verify data retention and deletion procedures"
-            ])
+            if 'breach' in query_lower:
+                hints.extend([
+                    "Implement automated breach detection systems",
+                    "Create 72-hour notification templates for supervisory authorities",
+                    "Develop breach assessment and documentation procedures"
+                ])
+            elif 'transfer' in query_lower or 'cross-border' in query_lower:
+                hints.extend([
+                    "Review adequacy decisions and Standard Contractual Clauses (SCCs)",
+                    "Implement Binding Corporate Rules (BCRs) for intra-group transfers",
+                    "Conduct Transfer Impact Assessments (TIAs) for third countries"
+                ])
+            else:
+                hints.extend([
+                    "Map personal data flows and processing activities (Article 30 records)",
+                    "Conduct Data Protection Impact Assessments (DPIAs) for high-risk processing",
+                    "Implement privacy by design and by default measures"
+                ])
         
         if any(keyword in query_lower for keyword in ['sec', 'securities', 'filing']):
             hints.extend([
@@ -129,11 +156,18 @@ class HintModule:
             ])
         
         if any(keyword in query_lower for keyword in ['sox', 'sarbanes', 'internal controls']):
-            hints.extend([
-                "Evaluate internal controls over financial reporting",
-                "Review auditor attestation requirements",
-                "Consider management assessment procedures"
-            ])
+            if 'reporting' in query_lower or 'financial' in query_lower:
+                hints.extend([
+                    "Implement COSO framework for internal controls design",
+                    "Document walkthrough procedures for key business processes",
+                    "Establish quarterly management assessment testing protocols"
+                ])
+            else:
+                hints.extend([
+                    "Map IT general controls (ITGC) and application controls",
+                    "Create SOD (Segregation of Duties) matrices and monitoring",
+                    "Implement continuous monitoring using GRC platforms"
+                ])
         
         if not hints:
             hints = [

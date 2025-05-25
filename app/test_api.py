@@ -5,7 +5,6 @@ import time
 API_BASE_URL = "http://localhost:8000"
 
 def test_health():
-    """Test the health endpoint."""
     print("Testing health endpoint...")
     response = requests.get(f"{API_BASE_URL}/health")
     if response.status_code == 200:
