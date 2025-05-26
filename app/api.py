@@ -4,8 +4,10 @@ import os
 import json
 import asyncio
 import logging
+import tempfile
+import uuid
 from typing import List, Dict, Optional
-from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
+from fastapi import FastAPI, Request, HTTPException, BackgroundTasks, UploadFile, File, Form
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
@@ -52,6 +54,25 @@ class HealthResponse(BaseModel):
     status: str
     modules: Dict[str, bool]
     version: str
+
+class DocumentUploadResponse(BaseModel):
+    document_id: str
+    filename: str
+    size: int
+    status: str
+
+class ComplianceAnalysisRequest(BaseModel):
+    document_id: str
+    regulation: str
+
+class ComplianceAnalysisResponse(BaseModel):
+    document_id: str
+    regulation: str
+    compliant: bool
+    score: float
+    issues: List[str]
+    recommendations: List[str]
+    citations: List[Dict]
 
 # Global initialization flag
 _initialized = False
@@ -394,4 +415,206 @@ async def debug_status():
             "PERPLEXITY_API_KEY": "***" if os.environ.get("PERPLEXITY_API_KEY") else "NOT_SET",
             "PINECONE_ENVIRONMENT": os.environ.get("PINECONE_ENVIRONMENT", "gcp-starter")
         }
-    } 
+    }
+
+# Document storage (in production, you'd use a proper database)
+uploaded_documents = {}
+
+@app.post("/upload-document", response_model=DocumentUploadResponse)
+async def upload_document(
+    file: UploadFile = File(...),
+    regulations: str = Form(...)
+):
+    """Upload a document for compliance analysis."""
+    try:
+        # Ensure modules are initialized
+        if not _initialized:
+            await initialize_modules()
+        
+        # Validate file type
+        allowed_types = [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ]
+        
+        if file.content_type not in allowed_types:
+            raise HTTPException(
+                status_code=400, 
+                detail="Only PDF and Word documents are supported"
+            )
+        
+        # Validate file size (10MB limit)
+        content = await file.read()
+        if len(content) > 10 * 1024 * 1024:
+            raise HTTPException(
+                status_code=400,
+                detail="File size cannot exceed 10MB"
+            )
+        
+        # Generate unique document ID
+        document_id = str(uuid.uuid4())
+        
+        # Save file temporarily (in production, use proper file storage)
+        temp_dir = tempfile.gettempdir()
+        file_path = os.path.join(temp_dir, f"{document_id}_{file.filename}")
+        
+        with open(file_path, "wb") as f:
+            f.write(content)
+        
+        # Store document metadata
+        uploaded_documents[document_id] = {
+            "id": document_id,
+            "filename": file.filename,
+            "content_type": file.content_type,
+            "size": len(content),
+            "file_path": file_path,
+            "regulations": json.loads(regulations) if regulations else [],
+            "uploaded_at": asyncio.get_event_loop().time(),
+            "content": None  # Will be extracted later
+        }
+        
+        logger.info(f"Document uploaded: {file.filename} ({len(content)} bytes)")
+        
+        return DocumentUploadResponse(
+            document_id=document_id,
+            filename=file.filename,
+            size=len(content),
+            status="uploaded"
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error uploading document: {e}")
+        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+
+@app.post("/analyze-compliance", response_model=ComplianceAnalysisResponse)
+async def analyze_compliance(request: ComplianceAnalysisRequest):
+    """Analyze a document for compliance with a specific regulation."""
+    try:
+        # Ensure modules are initialized
+        if not _initialized:
+            await initialize_modules()
+        
+        document_id = request.document_id
+        regulation = request.regulation
+        
+        # Check if document exists
+        if document_id not in uploaded_documents:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        document = uploaded_documents[document_id]
+        
+        # Extract text content if not already done
+        if document["content"] is None:
+            try:
+                document["content"] = await extract_document_text(document["file_path"], document["content_type"])
+            except Exception as e:
+                logger.error(f"Error extracting text from document: {e}")
+                document["content"] = f"Error extracting text: {str(e)}"
+        
+        content = document["content"]
+        
+        # Analyze compliance using RAG and Sonar
+        query = f"Analyze this document for {regulation} compliance. Document content: {content[:2000]}..."
+        
+        issues = []
+        recommendations = []
+        citations = []
+        
+        try:
+            # Use RAG for internal compliance knowledge
+            if rag.initialized:
+                internal_results = await rag.query_rag_system(query)
+                if internal_results:
+                    citations.extend(internal_results)
+                    
+                    # Extract issues and recommendations from internal results
+                    for result in internal_results:
+                        result_text = result.get('content', '').lower()
+                        if any(word in result_text for word in ['non-compliant', 'violation', 'missing', 'required']):
+                            issues.append(result.get('content', '')[:200] + "...")
+                        if any(word in result_text for word in ['recommend', 'should', 'must', 'ensure']):
+                            recommendations.append(result.get('content', '')[:200] + "...")
+            
+            # Use Sonar for external compliance information
+            if sonar.initialized:
+                external_query = f"What are the compliance requirements for {regulation}? What are common violations?"
+                external_results = await sonar.analyze_query(external_query)
+                if external_results and 'citations' in external_results:
+                    external_citations = external_results['citations']
+                    citations.extend(external_citations)
+                    
+                    # Extract additional compliance information
+                    for citation in external_citations:
+                        citation_text = citation.get('content', '').lower()
+                        if any(word in citation_text for word in ['requirement', 'must', 'shall', 'mandatory']):
+                            recommendations.append(citation.get('content', '')[:200] + "...")
+        
+        except Exception as e:
+            logger.error(f"Error during compliance analysis: {e}")
+            issues.append(f"Analysis error: {str(e)}")
+        
+        # Calculate compliance score based on issues found
+        base_score = 0.8
+        issue_penalty = min(len(issues) * 0.1, 0.6)  # Max penalty of 60%
+        score = max(base_score - issue_penalty, 0.0)
+        
+        # Determine if compliant (score > 0.7 and no critical issues)
+        compliant = score > 0.7 and len(issues) == 0
+        
+        # Add default recommendations if none found
+        if not recommendations:
+            recommendations = [
+                f"Review document against {regulation} requirements",
+                f"Ensure all mandatory {regulation} clauses are addressed",
+                f"Consider consulting with compliance experts for {regulation}"
+            ]
+        
+        logger.info(f"Compliance analysis completed for {regulation}: score={score:.2f}, compliant={compliant}")
+        
+        return ComplianceAnalysisResponse(
+            document_id=document_id,
+            regulation=regulation,
+            compliant=compliant,
+            score=score,
+            issues=issues[:5],  # Limit to top 5 issues
+            recommendations=recommendations[:5],  # Limit to top 5 recommendations
+            citations=[
+                {
+                    "title": c.get("title", ""),
+                    "content": c.get("content", "")[:300] + "...",
+                    "source": c.get("source", ""),
+                    "url": c.get("url", "")
+                } for c in citations[:10]  # Limit to top 10 citations
+            ]
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error analyzing compliance: {e}")
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+
+async def extract_document_text(file_path: str, content_type: str) -> str:
+    """Extract text content from uploaded document."""
+    try:
+        if content_type == "application/pdf":
+            # For PDF files - would need PyPDF2 or similar
+            # For now, return a placeholder
+            return f"PDF content extraction not implemented. File: {file_path}"
+        
+        elif content_type in ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]:
+            # For Word files - would need python-docx or similar
+            # For now, return a placeholder
+            return f"Word document content extraction not implemented. File: {file_path}"
+        
+        else:
+            # Try to read as plain text
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                return f.read()
+                
+    except Exception as e:
+        logger.error(f"Error extracting text from {file_path}: {e}")
+        return f"Error extracting text: {str(e)}" 
