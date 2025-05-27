@@ -1,260 +1,290 @@
-# Regulatory Compliance Assistant MVP
+# Regulatory Compliance Assistant
 
-An AI-powered compliance assistant that combines internal regulatory documents (GDPR/SOX) with external intelligence from Perplexity Sonar to provide comprehensive compliance guidance with actionable next steps.
+A comprehensive regulatory compliance platform that helps organizations manage, analyze, and ensure compliance with various regulatory frameworks using AI-powered document analysis and intelligent search capabilities.
 
-## 🚀 Features
+## ✨ Features
 
-- **Internal RAG System**: Query internal GDPR and SOX documents using Pinecone vector database
-- **External Intelligence**: Real-time compliance insights from Perplexity Sonar API
-- **Actionable Hints**: AI-generated next steps and compliance recommendations
-- **Streaming API**: Real-time responses via Server-Sent Events (SSE)
-- **RESTful API**: Standard JSON endpoints for integration
-- **Docker Support**: Containerized deployment ready
+### 🎯 Core Functionality
+- **AI-Powered Document Analysis**: Automatically analyze compliance documents against regulatory frameworks
+- **Intelligent Search**: Semantic search across all compliance documents with relevance scoring
+- **Real-time Compliance Monitoring**: Track compliance status and identify gaps
+- **Interactive Dashboard**: Modern, responsive dashboard with dark/light mode support
+- **Document Management**: Upload, categorize, and manage compliance documents
+- **Risk Assessment**: Identify and prioritize compliance risks
+- **Audit Trail**: Complete audit logging for compliance reporting
 
-## 🏗️ Architecture
+### 🚀 Enhanced Dashboard Features
+- **Sparkline Trends**: Mini charts showing trend direction for all key metrics
+- **Collapsible Sidebar**: Accordion-style navigation with filters and quick actions
+- **Drag & Drop Upload**: Bulk file upload with support for folders and ZIP files
+- **Policy Coverage Heatmap**: Visual representation of compliance gaps by category
+- **Risk Alerts**: Real-time high-severity compliance findings with direct action links
+- **Action Items**: Integrated pending reviews and approvals with assignment tracking
 
-```
-├── main.py                 # FastAPI application entrypoint
-├── app/
-│   ├── api.py             # FastAPI routes and endpoints
-│   ├── config.py          # Environment configuration
-│   ├── rag_module.py      # Internal document RAG system
-│   ├── sonar_module.py    # Perplexity Sonar integration
-│   ├── hint_module.py     # Contextual hint generation
-│   ├── data_ingestion.py  # Document processing pipeline
-│   └── test_api.py        # API tests
-├── scrapers/
-│   ├── gdpr_scraper.py    # GDPR document scraper
-│   └── sox_scraper.py     # SOX regulation scraper
-├── metadata/
-│   ├── gdpr_articles.json # Processed GDPR content
-│   └── sox_sections.json  # Processed SOX content
-└── requirements.txt       # Python dependencies
-```
+### ⌨️ Keyboard Shortcuts & Accessibility
+- **⌘K** - Focus search bar
+- **Ctrl+U** - Open upload dialog
+- **Ctrl+B** - Toggle sidebar
+- **Ctrl+Shift+D** - Toggle dark/light theme
+- **WCAG Compliant**: Proper contrast ratios and ARIA roles
+- **Tab Navigation**: Full keyboard navigation support
 
-## 🛠️ Setup Instructions
+### 🔄 Smart Features
+- **Popular Searches**: AI-suggested queries based on usage patterns
+- **Document Preview**: Inline PDF/text preview with collaboration tools
+- **Export Capabilities**: Download audit trails as CSV/JSON
+- **Theme Persistence**: Remembers user preferences across sessions
+- **Skeleton Loading**: Smooth loading states for better UX
+
+## 🛠 Tech Stack
+
+- **Frontend**: React 18, TypeScript, Tailwind CSS, Vite
+- **Backend**: FastAPI, Python 3.11+
+- **AI/ML**: Sentence Transformers, Pinecone Vector Database
+- **Search**: Semantic search with embedding-based similarity
+- **UI Components**: Custom component library with accessibility support
+- **Icons**: Lucide React for consistent iconography
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.9+
-- Pinecone API key
-- Perplexity API key
 
-### 1. Environment Setup
+- Python 3.11 or higher
+- Node.js 18 or higher
+- npm or yarn
 
-Copy the environment template and configure your API keys:
+### Installation
 
+1. Clone the repository:
 ```bash
-cp env.template .env
+git clone https://github.com/your-org/regulatory-compliance-assistant.git
+cd regulatory-compliance-assistant
 ```
 
-Edit `.env` with your API keys:
-```env
-PINECONE_API_KEY=your_pinecone_api_key_here
-PERPLEXITY_API_KEY=your_perplexity_api_key_here
-```
-
-### 2. Install Dependencies
-
+2. Set up the environment:
 ```bash
+# Install all dependencies (frontend and backend)
+npm run setup
+
+# Or install separately:
+npm run install-frontend
 pip install -r requirements.txt
 ```
 
-### 3. Set Up Vector Database
-
-Before running the application, you need to create a Pinecone index and ingest the regulatory documents:
-
-```python
-# Run the data ingestion script
-python -c "from app.data_ingestion import main; main()"
-```
-
-### 4. Quick Setup (Recommended)
-
-Run the interactive setup script:
+3. Configure environment variables:
 ```bash
-python setup.py
+cp .env.example .env
+# Edit .env with your configuration
 ```
 
-This will:
-- Check all dependencies
-- Verify environment configuration 
-- Set up the vector database with regulatory documents
-- Run API tests to verify everything works
+4. Start the development servers:
 
-### 5. Run the Application
-
-#### Local Development
+**Option 1: Run both servers separately**
 ```bash
-python main.py
+# Terminal 1 - Backend
+npm run backend
+
+# Terminal 2 - Frontend
+npm run dev
 ```
 
-#### Docker Deployment
+**Option 2: Run frontend only (for UI development)**
 ```bash
-docker build -t compliance-assistant .
-docker run -p 8000:8000 --env-file .env compliance-assistant
+npm run dev
 ```
 
-The API will be available at `http://localhost:8000`
+The application will be available at:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
 
-### 6. Demo the System
+## 📁 Project Structure
 
-Try the interactive demo to see the system in action:
+```
+regulatory-compliance-assistant/
+├── frontend/                 # React frontend application
+│   ├── src/
+│   │   ├── components/      # Reusable UI components
+│   │   │   ├── ui/         # Base UI components (buttons, cards, etc.)
+│   │   │   └── layout/     # Layout components (header, sidebar)
+│   │   ├── pages/          # Page components
+│   │   ├── hooks/          # Custom React hooks
+│   │   ├── services/       # API services
+│   │   ├── types/          # TypeScript type definitions
+│   │   └── lib/            # Utility functions
+│   ├── public/             # Static assets
+│   └── package.json        # Frontend dependencies
+├── app/                     # FastAPI backend application
+├── scrapers/               # Web scrapers for regulatory data
+├── metadata/               # Document metadata and schemas
+├── requirements.txt        # Python dependencies
+├── main.py                # Backend entry point
+└── package.json           # Root package.json for scripts
+```
+
+## 🎮 Usage
+
+### Dashboard Overview
+
+The enhanced dashboard provides a comprehensive view of your compliance status:
+
+1. **Metrics Cards**: Key performance indicators with trend sparklines
+2. **Risk Alerts**: High-priority compliance issues requiring immediate attention
+3. **Action Items**: Pending reviews, approvals, and assignments
+4. **Coverage Heatmap**: Visual representation of policy coverage gaps
+
+### Search & Discovery
+
+- **Inline Search**: Results display directly on the dashboard without navigation
+- **Smart Suggestions**: Popular searches based on global usage patterns
+- **Advanced Filtering**: Filter by category, date range, severity, and more
+- **Relevance Scoring**: AI-powered ranking of search results
+
+### Document Management
+
+- **Bulk Upload**: Drag and drop multiple files or entire folders
+- **Preview Modal**: Inline document preview with collaboration tools
+- **Metadata Extraction**: Automatic categorization and tagging
+- **Version Control**: Track document changes and updates
+
+### Collaboration Features
+
+- **Comments**: Add comments to documents and findings
+- **Assignments**: Assign action items to team members
+- **Notifications**: Real-time alerts for new matches and updates
+- **Audit Export**: Download complete audit trails for reporting
+
+## 🔧 API Endpoints
+
+### Core Endpoints
+- `GET /api/documents` - List all documents
+- `POST /api/documents/upload` - Upload new documents
+- `POST /api/search` - Search documents with filters
+- `GET /api/health` - System health check
+- `GET /api/compliance/analyze` - Analyze document compliance
+
+### Enhanced Endpoints
+- `GET /api/metrics` - Dashboard metrics with trends
+- `GET /api/alerts` - Risk alerts and notifications
+- `GET /api/actions` - Action items and assignments
+- `GET /api/coverage` - Policy coverage analysis
+- `POST /api/export` - Export audit trails
+
+## 🎨 UI Components
+
+The platform includes a comprehensive component library:
+
+### Base Components
+- **Button**: Multiple variants with accessibility support
+- **Card**: Flexible container with header/content sections
+- **Input**: Form inputs with validation states
+- **Modal**: Accessible overlay dialogs
+- **Accordion**: Collapsible content sections
+
+### Advanced Components
+- **Sparkline**: Mini trend charts for metrics
+- **Heatmap**: Visual coverage representation
+- **DragDropZone**: File upload with drag & drop
+- **Skeleton**: Loading state placeholders
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| ⌘K | Focus search bar |
+| Ctrl+U | Open upload dialog |
+| Ctrl+B | Toggle sidebar |
+| Ctrl+Shift+D | Toggle theme |
+| Esc | Close modals |
+| Tab/Shift+Tab | Navigate elements |
+| ↑/↓ | Navigate search results |
+
+## 🌙 Theme Support
+
+The application supports both light and dark themes with:
+- **Automatic Persistence**: Theme preference saved to localStorage
+- **System Integration**: Respects system theme preferences
+- **Smooth Transitions**: Animated theme switching
+- **Accessibility**: Maintains contrast ratios in both modes
+
+## 🔧 Development
+
+### Frontend Development
+
 ```bash
-python demo.py
+cd frontend
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run type-check   # Run TypeScript checks
 ```
 
-This will run example compliance queries and show you how the system works.
+### Backend Development
 
-## 📡 API Endpoints
-
-### Health Check
-```http
-GET /health
-```
-Returns module status and health information.
-
-### Query Endpoint (REST)
-```http
-POST /query
-Content-Type: application/json
-
-{
-  "text": "What are the GDPR requirements for data breach notification?",
-  "use_rag": true,
-  "use_sonar": true,
-  "use_hints": true
-}
-```
-
-### Chat Endpoint (Streaming SSE)
-```http
-POST /chat
-Content-Type: application/json
-
-{
-  "text": "What are the SOX requirements for financial reporting?",
-  "use_rag": true,
-  "use_sonar": true,
-  "use_hints": true
-}
-```
-
-### Response Format
-```json
-{
-  "query": "Your compliance question",
-  "internal_citations": [
-    {
-      "title": "GDPR Article 33",
-      "excerpt": "Notification of a personal data breach to the supervisory authority",
-      "source_url": "https://gdpr-info.eu/art-33-gdpr/",
-      "standard": "GDPR",
-      "article_number": "Article 33"
-    }
-  ],
-  "external_citations": [
-    {
-      "snippet": "External compliance information",
-      "source": "External source URL"
-    }
-  ],
-  "hints": {
-    "next_step_hint": "Consider implementing automated breach detection systems..."
-  },
-  "summary": {
-    "internal_count": 3,
-    "external_count": 2,
-    "total_citations": 5
-  }
-}
-```
-
-## 🧪 Testing
-
-Run the test suite:
 ```bash
-python -m pytest app/test_api.py -v
+python main.py       # Start FastAPI server
+pytest              # Run tests
+black .             # Format code
+flake8 .            # Lint code
 ```
-
-Test the API manually:
-```bash
-curl -X POST "http://localhost:8000/query" \
-  -H "Content-Type: application/json" \
-  -d '{"text": "GDPR data processing requirements", "use_rag": true, "use_sonar": true, "use_hints": true}'
-```
-
-## 🔧 Configuration
 
 ### Environment Variables
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `PINECONE_API_KEY` | Yes | - | Pinecone vector database API key |
-| `PERPLEXITY_API_KEY` | Yes | - | Perplexity Sonar API key |
-| `API_HOST` | No | `0.0.0.0` | API host address |
-| `API_PORT` | No | `8000` | API port number |
-| `DEBUG` | No | `False` | Enable debug mode |
-| `LOG_LEVEL` | No | `INFO` | Logging level |
-| `PINECONE_ENVIRONMENT` | No | `gcp-starter` | Pinecone environment |
+Create a `.env` file in the root directory:
 
-### Module Configuration
-- `ENABLE_RAG`: Enable/disable internal RAG system
-- `ENABLE_SONAR`: Enable/disable external Sonar integration  
-- `ENABLE_HINTS`: Enable/disable hint generation
+```env
+# API Configuration
+API_HOST=localhost
+API_PORT=8000
+DEBUG=true
 
-## 🚀 Deployment
+# Database Configuration
+DATABASE_URL=sqlite:///./compliance.db
 
-### Production Considerations
+# AI/ML Configuration
+PINECONE_API_KEY=your_pinecone_api_key
+PINECONE_ENVIRONMENT=your_pinecone_environment
+EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 
-1. **Environment Variables**: Set `DEBUG=False` and `LOG_LEVEL=WARNING`
-2. **CORS**: Configure appropriate CORS origins in `app/api.py`
-3. **Rate Limiting**: Consider adding rate limiting for production use
-4. **Monitoring**: Set up logging and monitoring for the deployed service
-
-### Docker Deployment
-```bash
-# Build the image
-docker build -t compliance-assistant:latest .
-
-# Run with environment file
-docker run -d \
-  --name compliance-assistant \
-  -p 8000:8000 \
-  --env-file .env \
-  compliance-assistant:latest
+# Security
+SECRET_KEY=your_secret_key_here
+ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
 ```
-
-## 📚 Data Sources
-
-The system includes scrapers for:
-- **GDPR**: EU General Data Protection Regulation articles
-- **SOX**: Sarbanes-Oxley Act sections
-
-Scraped data is stored in the `metadata/` directory and automatically ingested into Pinecone.
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow TypeScript best practices
+- Maintain accessibility standards (WCAG 2.1 AA)
+- Write comprehensive tests for new features
+- Update documentation for API changes
+- Use semantic commit messages
 
 ## 📄 License
 
-This project is licensed under the terms specified in the LICENSE file.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Troubleshooting
+## 🆘 Support
 
-### Common Issues
+For support, please:
+- Open an issue on GitHub for bugs or feature requests
+- Check the documentation for common questions
+- Contact the development team for enterprise support
 
-1. **Pinecone Connection Errors**: Verify your API key and index exists
-2. **Module Initialization Failures**: Check the `/debug` endpoint for detailed status
-3. **Empty Results**: Ensure documents are properly ingested into Pinecone
+## 🎯 Roadmap
 
-### Debug Endpoint
-```http
-GET /debug
-```
-Provides detailed module status and configuration information.
+- [ ] Advanced AI compliance analysis
+- [ ] Integration with external regulatory APIs
+- [ ] Mobile application
+- [ ] Advanced reporting and analytics
+- [ ] Multi-tenant support
+- [ ] SSO integration
 

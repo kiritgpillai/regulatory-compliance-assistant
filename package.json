@@ -1,0 +1,26 @@
+{
+  "name": "regulatory-compliance-assistant",
+  "version": "1.0.0",
+  "description": "A comprehensive regulatory compliance dashboard with AI-powered document analysis",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview",
+    "install-frontend": "cd frontend && npm install",
+    "backend": "python main.py",
+    "setup": "npm run install-frontend && pip install -r requirements.txt"
+  },
+  "keywords": [
+    "compliance",
+    "regulatory",
+    "dashboard",
+    "ai",
+    "document-analysis"
+  ],
+  "author": "Regulatory Compliance Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/regulatory-compliance-assistant.git"
+  }
+} 

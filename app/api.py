@@ -6,6 +6,7 @@ import asyncio
 import logging
 import tempfile
 import uuid
+import time
 from typing import List, Dict, Optional
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks, UploadFile, File, Form
 from fastapi.responses import StreamingResponse
@@ -73,6 +74,30 @@ class ComplianceAnalysisResponse(BaseModel):
     issues: List[str]
     recommendations: List[str]
     citations: List[Dict]
+
+class SearchRequest(BaseModel):
+    query: str = Field(..., description="The search query")
+    categories: List[str] = Field(default=[], description="Categories to filter by")
+    max_results: int = Field(default=10, description="Maximum number of results to return")
+
+class SearchResult(BaseModel):
+    id: str
+    title: str
+    content: str
+    source: str
+    category: str
+    relevance_score: float
+    url: Optional[str] = None
+    metadata: Dict = Field(default_factory=dict)
+
+class Document(BaseModel):
+    id: str
+    filename: str
+    size: int
+    content_type: str
+    uploaded_at: float
+    regulations: List[str]
+    status: str = "uploaded"
 
 # Global initialization flag
 _initialized = False
@@ -617,4 +642,214 @@ async def extract_document_text(file_path: str, content_type: str) -> str:
                 
     except Exception as e:
         logger.error(f"Error extracting text from {file_path}: {e}")
-        return f"Error extracting text: {str(e)}" 
+        return f"Error extracting text: {str(e)}"
+
+# Add new endpoints
+@app.post("/search")
+async def search_regulatory_content(request: SearchRequest):
+    """Search through regulatory compliance content."""
+    try:
+        # Ensure modules are initialized
+        if not _initialized:
+            await initialize_modules()
+        
+        query_text = request.query
+        if not query_text.strip():
+            raise HTTPException(status_code=400, detail="Query cannot be empty")
+        
+        logger.info(f"Processing search query: {query_text}")
+        
+        results = []
+        
+        # Use RAG for internal document search
+        if rag.initialized:
+            try:
+                internal_results = await rag.query_rag_system(query_text)
+                if internal_results:
+                    for i, result in enumerate(internal_results[:request.max_results]):
+                        search_result = SearchResult(
+                            id=f"internal_{i}",
+                            title=result.get("title", f"Regulatory Document {i+1}"),
+                            content=result.get("content", "")[:500] + "...",
+                            source=result.get("source", "Internal Knowledge Base"),
+                            category=result.get("category", "Regulation"),
+                            relevance_score=result.get("score", 0.8),
+                            url=result.get("url", ""),
+                            metadata=result.get("metadata", {})
+                        )
+                        results.append(search_result)
+            except Exception as e:
+                logger.error(f"Error in RAG search: {e}")
+        
+        # Use Sonar for external regulatory search
+        if sonar.initialized and len(results) < request.max_results:
+            try:
+                remaining_slots = request.max_results - len(results)
+                external_query = f"regulatory compliance {query_text}"
+                external_results = await sonar.analyze_query(external_query)
+                
+                if external_results and 'citations' in external_results:
+                    external_citations = external_results['citations'][:remaining_slots]
+                    for i, citation in enumerate(external_citations):
+                        search_result = SearchResult(
+                            id=f"external_{i}",
+                            title=citation.get("title", f"External Citation {i+1}"),
+                            content=citation.get("content", "")[:500] + "...",
+                            source=citation.get("source", "External Source"),
+                            category="External Regulation",
+                            relevance_score=0.7,  # Default score for external results
+                            url=citation.get("url", ""),
+                            metadata={"external": True}
+                        )
+                        results.append(search_result)
+            except Exception as e:
+                logger.error(f"Error in Sonar search: {e}")
+        
+        # Filter by categories if specified
+        if request.categories:
+            results = [r for r in results if r.category in request.categories]
+        
+        # Sort by relevance score
+        results.sort(key=lambda x: x.relevance_score, reverse=True)
+        
+        logger.info(f"Search completed: {len(results)} results found")
+        return results
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in search endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+
+@app.get("/documents")
+async def get_documents():
+    """Get list of all uploaded documents."""
+    try:
+        documents = []
+        for doc_id, doc_data in uploaded_documents.items():
+            document = Document(
+                id=doc_data["id"],
+                filename=doc_data["filename"],
+                size=doc_data["size"],
+                content_type=doc_data["content_type"],
+                uploaded_at=doc_data["uploaded_at"],
+                regulations=doc_data["regulations"],
+                status=doc_data.get("status", "uploaded")
+            )
+            documents.append(document)
+        
+        # Sort by upload time (most recent first)
+        documents.sort(key=lambda x: x.uploaded_at, reverse=True)
+        
+        logger.info(f"Retrieved {len(documents)} documents")
+        return documents
+        
+    except Exception as e:
+        logger.error(f"Error retrieving documents: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve documents: {str(e)}")
+
+@app.get("/documents/{document_id}")
+async def get_document(document_id: str):
+    """Get a specific document by ID."""
+    try:
+        if document_id not in uploaded_documents:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        doc_data = uploaded_documents[document_id]
+        document = Document(
+            id=doc_data["id"],
+            filename=doc_data["filename"],
+            size=doc_data["size"],
+            content_type=doc_data["content_type"],
+            uploaded_at=doc_data["uploaded_at"],
+            regulations=doc_data["regulations"],
+            status=doc_data.get("status", "uploaded")
+        )
+        
+        logger.info(f"Retrieved document: {document_id}")
+        return document
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrieving document {document_id}: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve document: {str(e)}")
+
+@app.post("/populate-sample-data")
+async def populate_sample_data():
+    """Populate the system with sample documents for demonstration."""
+    try:
+        current_time = time.time()
+        
+        sample_documents = [
+            {
+                "id": "sample-gdpr-guide",
+                "filename": "GDPR_Compliance_Guide.pdf",
+                "content_type": "application/pdf",
+                "size": 2048576,
+                "file_path": "/tmp/sample-gdpr-guide.pdf",
+                "regulations": ["GDPR", "Privacy"],
+                "uploaded_at": current_time - 86400,  # 1 day ago
+                "content": "This document contains comprehensive guidance on GDPR compliance requirements, including data subject rights, privacy by design principles, and breach notification procedures.",
+                "status": "analyzed"
+            },
+            {
+                "id": "sample-sox-policy",
+                "filename": "SOX_Financial_Controls.docx",
+                "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "size": 1024768,
+                "file_path": "/tmp/sample-sox-policy.docx",
+                "regulations": ["SOX", "Financial"],
+                "uploaded_at": current_time - 172800,  # 2 days ago
+                "content": "This policy document outlines Sarbanes-Oxley Act compliance procedures for financial reporting, internal controls, and audit requirements.",
+                "status": "analyzed"
+            },
+            {
+                "id": "sample-ccpa-assessment",
+                "filename": "CCPA_Risk_Assessment.pdf",
+                "content_type": "application/pdf",
+                "size": 3145728,
+                "file_path": "/tmp/sample-ccpa-assessment.pdf",
+                "regulations": ["CCPA", "Privacy"],
+                "uploaded_at": current_time - 259200,  # 3 days ago
+                "content": "Risk assessment document for California Consumer Privacy Act compliance, covering consumer rights, data processing activities, and privacy notices.",
+                "status": "pending"
+            },
+            {
+                "id": "sample-hipaa-manual",
+                "filename": "HIPAA_Security_Manual.pdf",
+                "content_type": "application/pdf",
+                "size": 4194304,
+                "file_path": "/tmp/sample-hipaa-manual.pdf",
+                "regulations": ["HIPAA", "Healthcare"],
+                "uploaded_at": current_time - 345600,  # 4 days ago
+                "content": "Comprehensive manual covering HIPAA security rule requirements, administrative safeguards, physical safeguards, and technical safeguards for protected health information.",
+                "status": "compliant"
+            },
+            {
+                "id": "sample-iso27001-procedure",
+                "filename": "ISO27001_Security_Procedures.docx",
+                "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "size": 1572864,
+                "file_path": "/tmp/sample-iso27001-procedure.docx",
+                "regulations": ["ISO27001", "Security"],
+                "uploaded_at": current_time - 432000,  # 5 days ago
+                "content": "Information security management procedures based on ISO 27001 standard, including risk management, security controls, and continuous improvement processes.",
+                "status": "analyzed"
+            }
+        ]
+        
+        # Add sample documents to the storage
+        for doc in sample_documents:
+            uploaded_documents[doc["id"]] = doc
+        
+        logger.info(f"Added {len(sample_documents)} sample documents")
+        
+        return {
+            "message": f"Successfully populated {len(sample_documents)} sample documents",
+            "documents": [{"id": doc["id"], "filename": doc["filename"]} for doc in sample_documents]
+        }
+        
+    except Exception as e:
+        logger.error(f"Error populating sample data: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to populate sample data: {str(e)}") 
