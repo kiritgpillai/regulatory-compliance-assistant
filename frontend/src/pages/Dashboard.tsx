@@ -220,6 +220,18 @@ const Dashboard: React.FC<DashboardProps> = ({
     setShowUploadZone(false)
   }
 
+  const handleResultClick = (result: SearchResult) => {
+    // Check if the result has a URL in metadata
+    const url = result.metadata?.url
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } else {
+      // For internal documents, you could navigate to a document detail page
+      console.log('Opening document:', result.id)
+      // You could implement a modal or navigate to a detail page here
+    }
+  }
+
 
 
   const getSeverityVariant = (severity: string): "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "info" => {
@@ -318,7 +330,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} hover:text-${isDarkMode ? 'white' : 'gray-900'} hover:bg-${isDarkMode ? 'slate-700' : 'gray-100'}`}
+                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} ${isDarkMode ? 'hover:text-white hover:bg-slate-600' : 'hover:text-gray-900 hover:bg-gray-100'}`}
                       >
                         <Filter className="w-5 h-5" />
                       </Button>
@@ -333,7 +345,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} hover:text-${isDarkMode ? 'white' : 'gray-900'} hover:bg-${isDarkMode ? 'slate-700' : 'gray-100'}`}
+                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} ${isDarkMode ? 'hover:text-white hover:bg-slate-600' : 'hover:text-gray-900 hover:bg-gray-100'}`}
                       >
                         <Activity className="w-5 h-5" />
                       </Button>
@@ -348,7 +360,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} hover:text-${isDarkMode ? 'white' : 'gray-900'} hover:bg-${isDarkMode ? 'slate-700' : 'gray-100'}`}
+                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} ${isDarkMode ? 'hover:text-white hover:bg-slate-600' : 'hover:text-gray-900 hover:bg-gray-100'}`}
                       >
                         <Shield className="w-5 h-5" />
                       </Button>
@@ -366,7 +378,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowUploadZone(true)}
-                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} hover:text-${isDarkMode ? 'white' : 'gray-900'} hover:bg-${isDarkMode ? 'slate-700' : 'gray-100'}`}
+                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} ${isDarkMode ? 'hover:text-white hover:bg-slate-600' : 'hover:text-gray-900 hover:bg-gray-100'}`}
                       >
                         <Plus className="w-5 h-5" />
                       </Button>
@@ -381,7 +393,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} hover:text-${isDarkMode ? 'white' : 'gray-900'} hover:bg-${isDarkMode ? 'slate-700' : 'gray-100'}`}
+                        className={`w-full h-10 p-0 flex items-center justify-center ${textClasses} ${isDarkMode ? 'hover:text-white hover:bg-slate-600' : 'hover:text-gray-900 hover:bg-gray-100'}`}
                       >
                         <Download className="w-5 h-5" />
                       </Button>
@@ -479,7 +491,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                   onClick={clearSearch}
                   variant="outline"
                   size="sm"
-                  className={`${isDarkMode ? 'border-slate-600 text-slate-300 hover:bg-slate-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
+                  className={`${isDarkMode ? 'border-slate-500 text-slate-200 hover:bg-slate-700 hover:border-slate-400 bg-slate-800' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
                 >
                   Clear Search
                 </Button>
@@ -513,11 +525,11 @@ const Dashboard: React.FC<DashboardProps> = ({
 
                   <div className="space-y-4">
                     {searchResults.map(result => (
-                      <Card key={result.id} className={`${cardClasses} hover:shadow-md transition-shadow`}>
+                      <Card key={result.id} className={`${cardClasses} hover:shadow-md transition-shadow cursor-pointer`} onClick={() => handleResultClick(result)}>
                         <CardHeader>
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <CardTitle className={`text-lg mb-2 hover:text-blue-600 cursor-pointer ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                              <CardTitle className={`text-lg mb-2 hover:text-slate-600 dark:hover:text-slate-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                 {result.title}
                               </CardTitle>
                               <div className={`flex items-center space-x-4 text-sm ${mutedTextClasses}`}>
@@ -535,7 +547,15 @@ const Dashboard: React.FC<DashboardProps> = ({
                               <span className={`text-sm font-medium ${getRelevanceColor(result.relevance)}`}>
                                 {Math.round(result.relevance * 100)}% match
                               </span>
-                              <Button variant="ghost" size="sm">
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleResultClick(result)
+                                }}
+                                className={`${isDarkMode ? 'hover:bg-slate-600 text-slate-300 hover:text-slate-100' : 'hover:bg-slate-100 text-gray-600 hover:text-gray-900'}`}
+                              >
                                 <ExternalLink className="h-4 w-4" />
                               </Button>
                             </div>
@@ -735,7 +755,11 @@ const Dashboard: React.FC<DashboardProps> = ({
                             </div>
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Button variant="ghost" size="sm">
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  className={`${isDarkMode ? 'hover:bg-slate-600 text-slate-300 hover:text-slate-100' : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'}`}
+                                >
                                   <Eye className="w-4 h-4" />
                                 </Button>
                               </TooltipTrigger>
@@ -792,7 +816,11 @@ const Dashboard: React.FC<DashboardProps> = ({
                             </div>
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Button variant="ghost" size="sm">
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  className={`${isDarkMode ? 'hover:bg-slate-600 text-slate-300 hover:text-slate-100' : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'}`}
+                                >
                                   <ExternalLink className="w-4 h-4" />
                                 </Button>
                               </TooltipTrigger>
@@ -861,13 +889,25 @@ const Dashboard: React.FC<DashboardProps> = ({
                   </p>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button variant="ghost" size="sm">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className={`${isDarkMode ? 'hover:bg-slate-600 text-slate-300 hover:text-slate-100' : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'}`}
+                  >
                     <Star className="w-4 h-4" />
                   </Button>
-                  <Button variant="ghost" size="sm">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className={`${isDarkMode ? 'hover:bg-slate-600 text-slate-300 hover:text-slate-100' : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'}`}
+                  >
                     <MessageSquare className="w-4 h-4" />
                   </Button>
-                  <Button variant="ghost" size="sm">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className={`${isDarkMode ? 'hover:bg-slate-600 text-slate-300 hover:text-slate-100' : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'}`}
+                  >
                     <UserPlus className="w-4 h-4" />
                   </Button>
                 </div>
@@ -898,4 +938,4 @@ const Dashboard: React.FC<DashboardProps> = ({
   )
 }
 
-export default Dashboard 
+export default Dashboard

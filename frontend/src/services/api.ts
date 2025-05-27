@@ -31,10 +31,43 @@ class ApiService {
   }
 
   async search(query: SearchQuery): Promise<ApiResponse<SearchResult[]>> {
-    return this.request<SearchResult[]>('/search', {
-      method: 'POST',
-      body: JSON.stringify(query),
-    })
+    try {
+      const response = await fetch(`${API_BASE_URL}/search`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(query),
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const rawData = await response.json()
+      
+      // Transform the API response to match frontend expectations
+      const transformedData: SearchResult[] = rawData.map((item: any) => ({
+        id: item.id,
+        title: item.title,
+        content: item.content,
+        category: item.category,
+        relevance: item.relevance_score || item.relevance || 0,
+        source: item.source,
+        timestamp: item.timestamp || new Date().toISOString(),
+        metadata: {
+          ...item.metadata,
+          url: item.url // Include the URL in metadata for easy access
+        }
+      }))
+
+      return { success: true, data: transformedData }
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Search failed',
+      }
+    }
   }
 
   async uploadDocument(file: File): Promise<ApiResponse<{ documentId: string }>> {
