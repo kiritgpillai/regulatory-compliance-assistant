@@ -58,21 +58,25 @@ def check_env_file():
 
 def check_env_variables():
     """Check if required environment variables are set"""
-    from dotenv import load_dotenv
-    load_dotenv()
-    
-    required_vars = ['PINECONE_API_KEY', 'PERPLEXITY_API_KEY']
-    all_good = True
-    
-    for var in required_vars:
-        value = os.getenv(var)
-        if value and value != f'your_{var.lower()}_here':
-            print(f"✅ {var} is set")
-        else:
-            print(f"❌ {var} not set or using placeholder value")
-            all_good = False
-    
-    return all_good
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+        
+        required_vars = ['PINECONE_API_KEY', 'PERPLEXITY_API_KEY']
+        all_good = True
+        
+        for var in required_vars:
+            value = os.getenv(var)
+            if value and value != f'your_{var.lower()}_here':
+                print(f"✅ {var} is set")
+            else:
+                print(f"❌ {var} not set or using placeholder value")
+                all_good = False
+        
+        return all_good
+    except ImportError:
+        print("⚠️  python-dotenv not installed - Run 'pip install -r requirements.txt' first")
+        return False
 
 def check_frontend_deps():
     """Check if frontend dependencies are installed"""
