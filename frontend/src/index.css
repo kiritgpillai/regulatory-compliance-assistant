@@ -1,0 +1,201 @@
+@import './styles/colors.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-color: theme('colors.border');
+  }
+  
+  body {
+    @apply bg-bg text-primary;
+    font-family: 'Titillium Web', sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    overflow: hidden;
+  }
+
+  /* Remove body scrollbar styles since body shouldn't scroll */
+}
+
+@layer components {
+  /* Semantic component classes using CSS variables */
+  .card {
+    @apply bg-surface border border-border shadow-md rounded-lg;
+  }
+  
+  .sidebar {
+    @apply bg-surface border-border shadow-sm;
+  }
+  
+  .button-primary {
+    @apply bg-primary text-inverse border border-primary hover:bg-secondary hover:border-secondary transition-all duration-200;
+  }
+  
+  .button-secondary {
+    @apply bg-surface text-primary border border-border hover:bg-hover-bg hover:border-hover-border transition-all duration-200;
+  }
+  
+  .button-ghost {
+    @apply text-primary hover:bg-hover-bg transition-all duration-200;
+  }
+  
+  .input {
+    @apply bg-bg border border-border text-primary placeholder:text-placeholder focus:border-border-strong focus:ring-2 focus:ring-focus-ring;
+  }
+  
+  .accent {
+    @apply bg-primary text-inverse;
+  }
+  
+  .hover-effect {
+    @apply hover:bg-hover-bg hover:shadow-sm transition-all duration-200;
+  }
+  
+  /* Custom scrollbar styles */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+    background-clip: content-box;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  
+  /* Thin scrollbar variant for smaller areas */
+  .custom-scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  
+  .custom-scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .custom-scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+    border: 1px solid transparent;
+    background-clip: content-box;
+  }
+  
+  .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+    background-clip: content-box;
+  }
+
+  /* Light mode scrollbars - keep current style */
+  [data-theme="light"] .custom-scrollbar {
+    scrollbar-color: #D1D5DB transparent;
+  }
+
+  [data-theme="light"] .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  [data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+  }
+
+  [data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+  }
+
+  [data-theme="light"] .custom-scrollbar-thin {
+    scrollbar-color: #D1D5DB transparent;
+  }
+
+  [data-theme="light"] .custom-scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  [data-theme="light"] .custom-scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+  }
+
+  [data-theme="light"] .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+  }
+
+  /* Dark mode scrollbars - dark grey track, light grey thumb */
+  [data-theme="dark"] .custom-scrollbar {
+    scrollbar-color: #A3A3A3 #2D2D2D !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-track {
+    background: #2D2D2D !important;
+    border-radius: 4px !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #A3A3A3 !important;
+    border-radius: 4px !important;
+    border: 2px solid #2D2D2D !important;
+    background-clip: content-box !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #D1D5DB !important;
+    background-clip: content-box !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar-thin {
+    scrollbar-color: #A3A3A3 #2D2D2D !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar-thin::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar-thin::-webkit-scrollbar-track {
+    background: #2D2D2D !important;
+    border-radius: 3px !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #A3A3A3 !important;
+    border-radius: 3px !important;
+    border: 1px solid #2D2D2D !important;
+    background-clip: content-box !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #D1D5DB !important;
+    background-clip: content-box !important;
+  }
+} 

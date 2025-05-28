@@ -20,7 +20,7 @@ if __name__ == "__main__":
     
     # Run the application
     uvicorn.run(
-        app,
+        "app.api:app",
         host=config.API_HOST,
         port=config.API_PORT,
         reload=config.DEBUG,
