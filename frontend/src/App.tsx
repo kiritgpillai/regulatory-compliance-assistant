@@ -22,7 +22,7 @@ function AppContent() {
     const newTheme = !isDarkMode
     setIsDarkMode(newTheme)
     
-    // Force scrollbar refresh
+    // Force scrollbar refresh for custom scrollable elements
     setTimeout(() => {
       const scrollableElements = document.querySelectorAll('.custom-scrollbar, .custom-scrollbar-thin')
       scrollableElements.forEach(element => {
@@ -32,11 +32,6 @@ function AppContent() {
         el.offsetHeight // Trigger reflow
         el.style.overflow = 'auto'
       })
-      
-      // Also refresh the main body scrollbar
-      document.body.style.overflow = 'hidden'
-      document.body.offsetHeight
-      document.body.style.overflow = 'auto'
     }, 50)
   }
 
@@ -80,35 +75,42 @@ function AppContent() {
 
   return (
     <div 
-      className="min-h-screen bg-bg text-primary"
+      className="h-screen bg-bg text-primary flex flex-col"
       data-theme={isDarkMode ? "dark" : "light"}
     >
-      <Header 
-        ref={headerRef}
-        onSearch={handleSearch}
-        onToggleSidebar={showSidebarToggle ? toggleSidebar : undefined}
-        isSidebarCollapsed={isSidebarCollapsed}
-        onToggleTheme={toggleTheme}
-        systemHealth={true}
-      />
-      <Routes>
-        <Route 
-          path="/" 
-          element={
-            <Dashboard 
-              searchQuery={searchQuery}
-              isSidebarCollapsed={isSidebarCollapsed}
-              onToggleSidebar={toggleSidebar}
-              onToggleTheme={toggleTheme}
-            />
-          } 
+      {/* Fixed Header */}
+      <div className="flex-shrink-0">
+        <Header 
+          ref={headerRef}
+          onSearch={handleSearch}
+          onToggleSidebar={showSidebarToggle ? toggleSidebar : undefined}
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleTheme={toggleTheme}
+          systemHealth={true}
         />
-        <Route path="/search" element={<SearchResults />} />
-        <Route 
-          path="/upload" 
-          element={<DocumentUpload />} 
-        />
-      </Routes>
+      </div>
+      
+      {/* Scrollable Content Area */}
+      <div className="flex-1 overflow-hidden">
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <Dashboard 
+                searchQuery={searchQuery}
+                isSidebarCollapsed={isSidebarCollapsed}
+                onToggleSidebar={toggleSidebar}
+                onToggleTheme={toggleTheme}
+              />
+            } 
+          />
+          <Route path="/search" element={<SearchResults />} />
+          <Route 
+            path="/upload" 
+            element={<DocumentUpload />} 
+          />
+        </Routes>
+      </div>
     </div>
   )
 }

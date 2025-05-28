@@ -450,9 +450,9 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <TooltipProvider>
-      <div className={`min-h-screen ${themeClasses} flex`}>
+      <div className={`h-full ${themeClasses} flex`}>
         {/* Sidebar - Fixed */}
-        <div className={`${isSidebarCollapsed ? 'w-16' : 'w-64'} ${sidebarClasses} border-r transition-all duration-300 flex-shrink-0`}>
+        <div className={`${isSidebarCollapsed ? 'w-16' : 'w-64'} ${sidebarClasses} border-r transition-all duration-300 flex-shrink-0 h-full overflow-y-auto custom-scrollbar-thin`}>
             <div className={`p-4 ${isSidebarCollapsed ? 'px-2' : ''}`}>
               {isSidebarCollapsed ? (
                 /* Collapsed Sidebar - Icon Only */
@@ -666,8 +666,8 @@ const Dashboard: React.FC<DashboardProps> = ({
             </div>
           </div>
 
-        {/* Main Content - No separate scrolling */}
-        <div className="flex-1">
+        {/* Main Content - Scrollable */}
+        <div className="flex-1 h-full overflow-y-auto custom-scrollbar">
           <div className="p-8">
           {/* Search Results Section */}
           {hasSearched && (

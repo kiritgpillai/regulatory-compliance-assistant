@@ -13,69 +13,10 @@
     @apply bg-bg text-primary;
     font-family: 'Titillium Web', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-border) transparent;
-  }
-  
-  body::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  body::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  body::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 4px;
-  }
-  
-  body::-webkit-scrollbar-thumb:hover {
-    background: var(--color-border-strong);
+    overflow: hidden;
   }
 
-  /* Force body scrollbar styles for dark mode */
-  [data-theme="dark"] body {
-    scrollbar-color: #A3A3A3 #2D2D2D !important;
-  }
-
-  [data-theme="dark"] body::-webkit-scrollbar {
-    width: 12px !important;
-  }
-
-  [data-theme="dark"] body::-webkit-scrollbar-track {
-    background: #2D2D2D !important;
-    border-radius: 6px !important;
-  }
-
-  [data-theme="dark"] body::-webkit-scrollbar-thumb {
-    background: #A3A3A3 !important;
-    border-radius: 6px !important;
-    border: 3px solid #2D2D2D !important;
-    background-clip: content-box !important;
-  }
-
-  [data-theme="dark"] body::-webkit-scrollbar-thumb:hover {
-    background: #D1D5DB !important;
-    background-clip: content-box !important;
-  }
-
-  /* Light mode body scrollbar */
-  [data-theme="light"] body {
-    scrollbar-color: #D1D5DB transparent !important;
-  }
-
-  [data-theme="light"] body::-webkit-scrollbar-track {
-    background: transparent !important;
-  }
-
-  [data-theme="light"] body::-webkit-scrollbar-thumb {
-    background: #D1D5DB !important;
-  }
-
-  [data-theme="light"] body::-webkit-scrollbar-thumb:hover {
-    background: #9CA3AF !important;
-  }
+  /* Remove body scrollbar styles since body shouldn't scroll */
 }
 
 @layer components {
