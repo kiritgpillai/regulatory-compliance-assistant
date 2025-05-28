@@ -33,6 +33,49 @@
   body::-webkit-scrollbar-thumb:hover {
     background: var(--color-border-strong);
   }
+
+  /* Force body scrollbar styles for dark mode */
+  [data-theme="dark"] body {
+    scrollbar-color: #A3A3A3 #2D2D2D !important;
+  }
+
+  [data-theme="dark"] body::-webkit-scrollbar {
+    width: 12px !important;
+  }
+
+  [data-theme="dark"] body::-webkit-scrollbar-track {
+    background: #2D2D2D !important;
+    border-radius: 6px !important;
+  }
+
+  [data-theme="dark"] body::-webkit-scrollbar-thumb {
+    background: #A3A3A3 !important;
+    border-radius: 6px !important;
+    border: 3px solid #2D2D2D !important;
+    background-clip: content-box !important;
+  }
+
+  [data-theme="dark"] body::-webkit-scrollbar-thumb:hover {
+    background: #D1D5DB !important;
+    background-clip: content-box !important;
+  }
+
+  /* Light mode body scrollbar */
+  [data-theme="light"] body {
+    scrollbar-color: #D1D5DB transparent !important;
+  }
+
+  [data-theme="light"] body::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  [data-theme="light"] body::-webkit-scrollbar-thumb {
+    background: #D1D5DB !important;
+  }
+
+  [data-theme="light"] body::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF !important;
+  }
 }
 
 @layer components {
@@ -164,44 +207,54 @@
 
   /* Dark mode scrollbars - dark grey track, light grey thumb */
   [data-theme="dark"] .custom-scrollbar {
-    scrollbar-color: #A3A3A3 #2D2D2D;
+    scrollbar-color: #A3A3A3 #2D2D2D !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
   }
 
   [data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-track {
-    background: #2D2D2D;
-    border-radius: 4px;
+    background: #2D2D2D !important;
+    border-radius: 4px !important;
   }
 
   [data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #A3A3A3;
-    border-radius: 4px;
-    border: 2px solid #2D2D2D;
-    background-clip: content-box;
+    background: #A3A3A3 !important;
+    border-radius: 4px !important;
+    border: 2px solid #2D2D2D !important;
+    background-clip: content-box !important;
   }
 
   [data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #D1D5DB;
-    background-clip: content-box;
+    background: #D1D5DB !important;
+    background-clip: content-box !important;
   }
 
   [data-theme="dark"] .custom-scrollbar-thin {
-    scrollbar-color: #A3A3A3 #2D2D2D;
+    scrollbar-color: #A3A3A3 #2D2D2D !important;
+  }
+
+  [data-theme="dark"] .custom-scrollbar-thin::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
   }
 
   [data-theme="dark"] .custom-scrollbar-thin::-webkit-scrollbar-track {
-    background: #2D2D2D;
-    border-radius: 3px;
+    background: #2D2D2D !important;
+    border-radius: 3px !important;
   }
 
   [data-theme="dark"] .custom-scrollbar-thin::-webkit-scrollbar-thumb {
-    background: #A3A3A3;
-    border-radius: 3px;
-    border: 1px solid #2D2D2D;
-    background-clip: content-box;
+    background: #A3A3A3 !important;
+    border-radius: 3px !important;
+    border: 1px solid #2D2D2D !important;
+    background-clip: content-box !important;
   }
 
   [data-theme="dark"] .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: #D1D5DB;
-    background-clip: content-box;
+    background: #D1D5DB !important;
+    background-clip: content-box !important;
   }
 } 

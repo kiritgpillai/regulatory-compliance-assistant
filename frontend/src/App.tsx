@@ -19,7 +19,25 @@ function AppContent() {
   }
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode)
+    const newTheme = !isDarkMode
+    setIsDarkMode(newTheme)
+    
+    // Force scrollbar refresh
+    setTimeout(() => {
+      const scrollableElements = document.querySelectorAll('.custom-scrollbar, .custom-scrollbar-thin')
+      scrollableElements.forEach(element => {
+        const el = element as HTMLElement
+        // Force a style recalculation
+        el.style.overflow = 'hidden'
+        el.offsetHeight // Trigger reflow
+        el.style.overflow = 'auto'
+      })
+      
+      // Also refresh the main body scrollbar
+      document.body.style.overflow = 'hidden'
+      document.body.offsetHeight
+      document.body.style.overflow = 'auto'
+    }, 50)
   }
 
   const toggleSidebar = () => {
