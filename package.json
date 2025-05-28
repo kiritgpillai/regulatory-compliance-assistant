@@ -8,7 +8,11 @@
     "preview": "cd frontend && npm run preview",
     "install-frontend": "cd frontend && npm install",
     "backend": "python main.py",
-    "setup": "npm run install-frontend && pip install -r requirements.txt"
+    "setup": "npm run install-frontend && pip install -r requirements.txt",
+    "verify": "python verify-setup.py",
+    "clean": "rm -rf frontend/node_modules frontend/dist venv __pycache__ *.log",
+    "lint": "cd frontend && npm run lint",
+    "test": "cd frontend && npm run test"
   },
   "keywords": [
     "compliance",

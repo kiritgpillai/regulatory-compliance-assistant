@@ -14,12 +14,14 @@ A comprehensive regulatory compliance platform that helps organizations manage, 
 - **Audit Trail**: Complete audit logging for compliance reporting
 
 ### 🚀 Enhanced Dashboard Features
+- **Fixed Header Layout**: Header stays at top while only content scrolls for better navigation
+- **Responsive Scrollbars**: Custom themed scrollbars that adapt to light/dark mode
 - **Sparkline Trends**: Mini charts showing trend direction for all key metrics
 - **Collapsible Sidebar**: Accordion-style navigation with filters and quick actions
 - **Drag & Drop Upload**: Bulk file upload with support for folders and ZIP files
-- **Policy Coverage Heatmap**: Visual representation of compliance gaps by category
 - **Risk Alerts**: Real-time high-severity compliance findings with direct action links
 - **Action Items**: Integrated pending reviews and approvals with assignment tracking
+- **Compliance Tools**: Built-in risk assessment, policy generator, and audit report tools
 
 ### ⌨️ Keyboard Shortcuts & Accessibility
 - **⌘K** - Focus search bar
@@ -52,6 +54,8 @@ A comprehensive regulatory compliance platform that helps organizations manage, 
 - Python 3.11 or higher
 - Node.js 18 or higher
 - npm or yarn
+- Pinecone API key ([Sign up](https://www.pinecone.io/))
+- Perplexity API key ([Sign up](https://www.perplexity.ai/))
 
 ### Installation
 
@@ -61,25 +65,18 @@ git clone https://github.com/your-org/regulatory-compliance-assistant.git
 cd regulatory-compliance-assistant
 ```
 
-2. Set up the environment:
-```bash
-# Install all dependencies (frontend and backend)
-npm run setup
-
-# Or install separately:
-npm run install-frontend
-pip install -r requirements.txt
-```
-
-3. Configure environment variables:
+2. Set up environment variables:
 ```bash
 cp .env.example .env
-# Edit .env with your configuration
+# Edit .env with your actual API keys
 ```
 
-4. Start the development servers:
+3. Install all dependencies:
+```bash
+npm run setup
+```
 
-**Option 1: Run both servers separately**
+4. Start the application:
 ```bash
 # Terminal 1 - Backend
 npm run backend
@@ -88,15 +85,12 @@ npm run backend
 npm run dev
 ```
 
-**Option 2: Run frontend only (for UI development)**
-```bash
-npm run dev
-```
-
 The application will be available at:
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
+
+> **For detailed setup instructions for team members, see [SETUP.md](SETUP.md)**
 
 ## 📁 Project Structure
 
