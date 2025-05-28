@@ -128,4 +128,29 @@
     background: var(--color-border-strong);
     background-clip: content-box;
   }
+
+  /* Ensure scrollbars update with theme - additional specificity */
+  [data-theme] .custom-scrollbar {
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  [data-theme] .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+  }
+
+  [data-theme] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+  }
+
+  [data-theme] .custom-scrollbar-thin {
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  [data-theme] .custom-scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+  }
+
+  [data-theme] .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+  }
 } 
