@@ -8,7 +8,6 @@ interface AccordionProps {
   defaultOpen?: boolean
   icon?: React.ReactNode
   className?: string
-  isDarkMode?: boolean
 }
 
 const Accordion: React.FC<AccordionProps> = ({
@@ -16,25 +15,15 @@ const Accordion: React.FC<AccordionProps> = ({
   children,
   defaultOpen = false,
   icon,
-  className,
-  isDarkMode = false
+  className
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen)
-
-  const textClasses = isDarkMode ? 'text-slate-400' : 'text-gray-600'
-  const hoverClasses = isDarkMode 
-    ? 'hover:text-white hover:bg-slate-700' 
-    : 'hover:text-gray-900 hover:bg-gray-100'
 
   return (
     <div className={cn('mb-4', className)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          'w-full flex items-center justify-between p-2 rounded transition-colors',
-          textClasses,
-          hoverClasses
-        )}
+        className="w-full flex items-center justify-between p-2 rounded transition-colors text-secondary hover:text-primary hover:bg-hover-bg"
         aria-expanded={isOpen}
       >
         <div className="flex items-center space-x-2">

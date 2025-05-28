@@ -1,7 +1,7 @@
 {
-  "name": "regulatory-compliance-assistant",
+  "name": "comply",
   "version": "1.0.0",
-  "description": "A comprehensive regulatory compliance dashboard with AI-powered document analysis",
+  "description": "A comprehensive compliance dashboard with AI-powered document analysis",
   "scripts": {
     "dev": "cd frontend && npm run dev",
     "build": "cd frontend && npm run build",
@@ -17,10 +17,10 @@
     "ai",
     "document-analysis"
   ],
-  "author": "Regulatory Compliance Team",
+  "author": "Comply Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/regulatory-compliance-assistant.git"
+    "url": "https://github.com/your-org/comply.git"
   }
 } 

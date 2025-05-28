@@ -51,12 +51,7 @@ interface FileUpload {
   error?: string
 }
 
-interface DocumentUploadProps {
-  isDarkMode: boolean
-  onToggleTheme: () => void
-}
-
-const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
+const DocumentUpload: React.FC = () => {
   const [files, setFiles] = useState<FileUpload[]>([])
   const [selectedRegulations, setSelectedRegulations] = useState<string[]>(['gdpr', 'sox'])
   const [globalError, setGlobalError] = useState<string | null>(null)
@@ -68,24 +63,24 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
     const name = file.name.toLowerCase()
     
     if (type.includes('pdf') || name.endsWith('.pdf')) {
-      return <FileText className="w-8 h-8 text-red-500" />
+      return <FileText className="w-8 h-8 text-error" />
     }
     if (type.includes('word') || name.endsWith('.doc') || name.endsWith('.docx')) {
-      return <FileText className="w-8 h-8 text-slate-600 dark:text-slate-400" />
+      return <FileText className="w-8 h-8 text-secondary" />
     }
     if (type.includes('image')) {
-      return <Image className="w-8 h-8 text-green-500" />
+      return <Image className="w-8 h-8 text-success" />
     }
     if (type.includes('video')) {
-      return <Video className="w-8 h-8 text-purple-500" />
+      return <Video className="w-8 h-8 text-accent-secondary" />
     }
     if (type.includes('audio')) {
-      return <Music className="w-8 h-8 text-orange-500" />
+      return <Music className="w-8 h-8 text-warning" />
     }
     if (name.endsWith('.zip') || name.endsWith('.rar') || name.endsWith('.7z')) {
-      return <Archive className="w-8 h-8 text-yellow-500" />
+      return <Archive className="w-8 h-8 text-warning" />
     }
-    return <File className="w-8 h-8 text-gray-500" />
+    return <File className="w-8 h-8 text-muted" />
   }
 
   const formatFileSize = (bytes: number) => {
@@ -309,9 +304,9 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
   }
 
   const getComplianceColor = (score: number) => {
-    if (score >= 80) return isDarkMode ? 'text-green-400' : 'text-green-600'
-    if (score >= 60) return isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
-    return isDarkMode ? 'text-red-400' : 'text-red-600'
+    if (score >= 80) return 'text-success'
+    if (score >= 60) return 'text-warning'
+    return 'text-error'
   }
 
   const pendingCount = files.filter(f => f.status === 'pending').length
@@ -324,13 +319,13 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
 
   return (
     <TooltipProvider>
-      <div className={`min-h-screen ${isDarkMode ? 'bg-slate-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+      <div className="min-h-screen bg-bg text-primary">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          <h1 className="text-3xl font-bold text-primary">
             Document Upload
           </h1>
-          <p className={`mt-2 ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+          <p className="mt-2 text-secondary">
             Upload multiple documents and check compliance against regulatory frameworks
           </p>
         </div>
@@ -343,12 +338,12 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
         )}
 
         {/* Upload Section */}
-        <Card className={`mb-6 ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
+        <Card className="mb-6">
           <CardHeader>
-            <CardTitle className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+            <CardTitle>
               Upload Documents
             </CardTitle>
-            <CardDescription className={isDarkMode ? 'text-slate-400' : 'text-gray-600'}>
+            <CardDescription>
               Support for PDF, Word, TXT, and ZIP files (max 50MB each). Drag multiple files or folders.
             </CardDescription>
           </CardHeader>
@@ -357,20 +352,19 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
               onFilesSelected={handleFilesSelected}
               multiple={true}
               accept=".pdf,.doc,.docx,.txt,.zip"
-              isDarkMode={isDarkMode}
             />
           </CardContent>
         </Card>
 
         {/* Regulations Selection */}
-        <Card className={`mb-6 ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
+        <Card className="mb-6">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                <CardTitle>
                   Compliance Frameworks
                 </CardTitle>
-                <CardDescription className={isDarkMode ? 'text-slate-400' : 'text-gray-600'}>
+                <CardDescription>
                   Select the regulatory frameworks to check compliance against
                 </CardDescription>
               </div>
@@ -382,7 +376,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsRegulationsExpanded(!isRegulationsExpanded)}
-                  className={`md:hidden ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                  className="md:hidden"
                 >
                   {isRegulationsExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </Button>
@@ -400,7 +394,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
               <TabsContent value="all" className="mt-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {REGULATIONS.map((regulation) => (
-                    <div key={regulation.id} className={`flex items-start space-x-3 p-3 rounded-lg border transition-colors ${isDarkMode ? 'border-slate-600 hover:bg-slate-700/50' : 'border-gray-200 hover:bg-gray-50'}`}>
+                    <div key={regulation.id} className="flex items-start space-x-3 p-3 rounded-lg border border-border hover:bg-hover-bg transition-colors">
                       <Checkbox
                         id={regulation.id}
                         checked={selectedRegulations.includes(regulation.id)}
@@ -410,11 +404,11 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                       <div className="grid gap-1.5 leading-none flex-1">
                         <label
                           htmlFor={regulation.id}
-                          className={`text-sm font-medium leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                          className="text-sm font-medium leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-primary"
                         >
                           {regulation.name}
                         </label>
-                        <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                        <p className="text-xs text-secondary">
                           {regulation.description}
                         </p>
                       </div>
@@ -426,7 +420,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
               <TabsContent value="privacy" className="mt-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {REGULATIONS.filter(reg => ['gdpr', 'ccpa', 'hipaa'].includes(reg.id)).map((regulation) => (
-                    <div key={regulation.id} className={`flex items-start space-x-3 p-3 rounded-lg border transition-colors ${isDarkMode ? 'border-slate-600 hover:bg-slate-700/50' : 'border-gray-200 hover:bg-gray-50'}`}>
+                    <div key={regulation.id} className="flex items-start space-x-3 p-3 rounded-lg border border-border hover:bg-hover-bg transition-colors">
                       <Checkbox
                         id={`privacy-${regulation.id}`}
                         checked={selectedRegulations.includes(regulation.id)}
@@ -436,11 +430,11 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                       <div className="grid gap-1.5 leading-none flex-1">
                         <label
                           htmlFor={`privacy-${regulation.id}`}
-                          className={`text-sm font-medium leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                          className="text-sm font-medium leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-primary"
                         >
                           {regulation.name}
                         </label>
-                        <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                        <p className="text-xs text-secondary">
                           {regulation.description}
                         </p>
                       </div>
@@ -452,7 +446,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
               <TabsContent value="financial" className="mt-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {REGULATIONS.filter(reg => ['sox', 'pci-dss', 'iso27001'].includes(reg.id)).map((regulation) => (
-                    <div key={regulation.id} className={`flex items-start space-x-3 p-3 rounded-lg border transition-colors ${isDarkMode ? 'border-slate-600 hover:bg-slate-700/50' : 'border-gray-200 hover:bg-gray-50'}`}>
+                    <div key={regulation.id} className="flex items-start space-x-3 p-3 rounded-lg border border-border hover:bg-hover-bg transition-colors">
                       <Checkbox
                         id={`financial-${regulation.id}`}
                         checked={selectedRegulations.includes(regulation.id)}
@@ -462,11 +456,11 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                       <div className="grid gap-1.5 leading-none flex-1">
                         <label
                           htmlFor={`financial-${regulation.id}`}
-                          className={`text-sm font-medium leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                          className="text-sm font-medium leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-primary"
                         >
                           {regulation.name}
                         </label>
-                        <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                        <p className="text-xs text-secondary">
                           {regulation.description}
                         </p>
                       </div>
@@ -480,41 +474,41 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
 
                 {/* File List */}
         {(files.length > 0 || isScanning) && (
-          <Card className={`mb-6 ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
+          <Card className="mb-6">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                  <CardTitle>
                     Files ({isScanning ? '...' : files.length})
                   </CardTitle>
-                  <CardDescription className={isDarkMode ? 'text-slate-400' : 'text-gray-600'}>
+                  <CardDescription>
                     {isScanning ? (
                       <div className="flex items-center space-x-2 text-sm">
-                        <div className="w-2 h-2 bg-slate-600 dark:bg-slate-400 rounded-full animate-pulse"></div>
+                        <div className="w-2 h-2 bg-muted rounded-full animate-pulse"></div>
                         <span>Scanning files...</span>
                       </div>
                     ) : (
                       <>
                         <div className="flex items-center space-x-4 text-sm">
                           <span className="flex items-center">
-                            <span className="w-2 h-2 bg-gray-400 rounded-full mr-1"></span>
+                            <span className="w-2 h-2 bg-muted rounded-full mr-1"></span>
                             {pendingCount} pending
                           </span>
                           <span className="flex items-center">
-                            <span className="w-2 h-2 bg-slate-600 dark:bg-slate-400 rounded-full mr-1"></span>
+                            <span className="w-2 h-2 bg-muted rounded-full mr-1"></span>
                             {uploadingCount} uploading
                           </span>
                           <span className="flex items-center">
-                            <span className="w-2 h-2 bg-yellow-500 rounded-full mr-1"></span>
+                            <span className="w-2 h-2 bg-warning rounded-full mr-1"></span>
                             {analyzingCount} analyzing
                           </span>
                           <span className="flex items-center">
-                            <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+                            <span className="w-2 h-2 bg-success rounded-full mr-1"></span>
                             {completedCount} completed
                           </span>
                           {errorCount > 0 && (
                             <span className="flex items-center">
-                              <span className="w-2 h-2 bg-red-500 rounded-full mr-1"></span>
+                              <span className="w-2 h-2 bg-error rounded-full mr-1"></span>
                               {errorCount} errors
                             </span>
                           )}
@@ -522,10 +516,10 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                         {totalFiles > 0 && (
                           <div className="mt-2">
                             <div className="flex items-center justify-between text-xs mb-1">
-                              <span className={isDarkMode ? 'text-slate-500' : 'text-gray-500'}>
+                              <span className="text-muted">
                                 Overall Progress
                               </span>
-                              <span className={isDarkMode ? 'text-slate-400' : 'text-gray-600'}>
+                              <span className="text-secondary">
                                 {completedCount}/{totalFiles} files ({Math.round(overallProgress)}%)
                               </span>
                             </div>
@@ -542,7 +536,6 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                       variant="outline"
                       size="sm"
                       onClick={clearCompleted}
-                      className={isDarkMode ? 'border-slate-600 text-slate-300 hover:bg-slate-700' : ''}
                     >
                       Clear Completed
                     </Button>
@@ -552,7 +545,6 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                       variant="outline"
                       size="sm"
                       onClick={clearAll}
-                      className={isDarkMode ? 'border-slate-600 text-slate-300 hover:bg-slate-700' : ''}
                     >
                       Clear All
                     </Button>
@@ -563,21 +555,21 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
             <CardContent>
               {isScanning ? (
                 <div className="space-y-4">
-                  <SkeletonList items={3} isDarkMode={isDarkMode} />
+                  <SkeletonList items={3} />
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-4 custom-scrollbar">
                   {files.map((fileUpload) => (
                   <div
                     key={fileUpload.id}
-                    className={`p-4 rounded-lg border ${isDarkMode ? 'border-slate-700 bg-slate-700/50' : 'border-gray-200 bg-gray-50'}`}
+                    className="p-4 rounded-lg border border-border bg-surface"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-start space-x-3 flex-1">
                         {getFileIcon(fileUpload.file)}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center space-x-2">
-                            <h4 className={`text-sm font-medium truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                            <h4 className="text-sm font-medium truncate text-primary">
                               {fileUpload.file.name}
                             </h4>
                             <Badge variant={getStatusVariant(fileUpload.status)} className="gap-1">
@@ -585,7 +577,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                               {getStatusText(fileUpload.status)}
                             </Badge>
                           </div>
-                          <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                          <p className="text-xs mt-1 text-secondary">
                             {formatFileSize(fileUpload.file.size)} • {fileUpload.file.type || 'Unknown type'}
                           </p>
                           
@@ -594,8 +586,8 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                           {/* Status-specific information */}
                           {fileUpload.status === 'pending' && (
                             <div className="flex items-center text-xs">
-                              <Clock className="w-3 h-3 mr-1 text-gray-400" />
-                              <span className={isDarkMode ? 'text-slate-500' : 'text-gray-500'}>
+                              <Clock className="w-3 h-3 mr-1 text-muted" />
+                              <span className="text-muted">
                                 Waiting in queue...
                               </span>
                             </div>
@@ -603,8 +595,8 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                           
                           {fileUpload.status === 'completed' && (
                             <div className="flex items-center text-xs">
-                              <CheckCircle2 className="w-3 h-3 mr-1 text-green-500" />
-                              <span className="text-green-600">
+                              <CheckCircle2 className="w-3 h-3 mr-1 text-success" />
+                              <span className="text-success">
                                 Processing completed successfully
                               </span>
                             </div>
@@ -615,8 +607,8 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                             <div className="space-y-2">
                               <div className="flex items-center justify-between text-xs">
                                 <div className="flex items-center">
-                                  <Upload className="w-3 h-3 mr-1 text-slate-600 dark:text-slate-400" />
-                                  <span className={isDarkMode ? 'text-slate-400' : 'text-gray-600'}>
+                                  <Upload className="w-3 h-3 mr-1 text-muted" />
+                                  <span className="text-secondary">
                                     {getStatusText(fileUpload.status)}...
                                   </span>
                                 </div>
@@ -632,8 +624,8 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                             <div className="space-y-2">
                               <div className="flex items-center justify-between text-xs">
                                 <div className="flex items-center">
-                                  <Zap className="w-3 h-3 mr-1 text-yellow-500" />
-                                  <span className={isDarkMode ? 'text-slate-400' : 'text-gray-600'}>
+                                  <Zap className="w-3 h-3 mr-1 text-warning" />
+                                  <span className="text-secondary">
                                     Analyzing compliance...
                                   </span>
                                 </div>
@@ -647,16 +639,16 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                           
                           {/* Error Message */}
                           {fileUpload.status === 'error' && fileUpload.error && (
-                            <div className={`mt-2 p-2 rounded text-xs border ${isDarkMode ? 'bg-red-900/20 border-red-800 text-red-300' : 'bg-red-50 border-red-200 text-red-700'}`}>
+                            <div className="mt-2 p-2 rounded text-xs border bg-error-bg border-error text-error">
                               {fileUpload.error}
                             </div>
                           )}
                           
                           {/* Compliance Results */}
                           {fileUpload.status === 'completed' && fileUpload.complianceResult && (
-                            <div className={`mt-3 p-3 rounded border ${isDarkMode ? 'bg-green-900/20 border-green-800' : 'bg-green-50 border-green-200'}`}>
+                            <div className="mt-3 p-3 rounded border bg-success-bg border-success">
                               <div className="flex items-center justify-between mb-2">
-                                <span className={`text-sm font-medium ${isDarkMode ? 'text-green-300' : 'text-green-900'}`}>Compliance Analysis</span>
+                                <span className="text-sm font-medium text-primary">Compliance Analysis</span>
                                 <span className={`text-sm font-bold ${getComplianceColor(fileUpload.complianceResult.overallScore)}`}>
                                   {fileUpload.complianceResult.overallScore}%
                                 </span>
@@ -664,7 +656,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                               <div className="space-y-1">
                                 {fileUpload.complianceResult.regulations.slice(0, 3).map((reg, index) => (
                                   <div key={index} className="flex items-center justify-between text-xs">
-                                    <span className={isDarkMode ? 'text-green-400' : 'text-green-700'}>{reg.name}</span>
+                                    <span className="text-success">{reg.name}</span>
                                     <span className={`font-medium ${getComplianceColor(reg.score)}`}>
                                       {reg.score}%
                                     </span>
@@ -685,7 +677,6 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => retryFile(fileUpload.id)}
-                                className={isDarkMode ? 'text-slate-400 hover:text-white hover:bg-slate-600' : ''}
                               >
                                 Retry
                               </Button>
@@ -701,7 +692,6 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className={isDarkMode ? 'text-slate-400 hover:text-white hover:bg-slate-600' : ''}
                               >
                                 <Eye className="w-4 h-4" />
                               </Button>
@@ -717,7 +707,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                               variant="ghost"
                               size="sm"
                               onClick={() => removeFile(fileUpload.id)}
-                              className={`${isDarkMode ? 'text-slate-400 hover:text-red-400 hover:bg-slate-600' : 'text-gray-400 hover:text-red-600'}`}
+                              className="text-error hover:text-error hover:bg-error-bg"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
@@ -745,10 +735,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ isDarkMode }) => {
                   onClick={uploadAllFiles}
                   disabled={pendingCount === 0 || selectedRegulations.length === 0}
                   size="lg"
-                  className={`${isDarkMode 
-                ? 'bg-slate-700 hover:bg-slate-600 text-white' 
-                : 'bg-gray-900 hover:bg-gray-800 text-white'
-              } shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-3`}
+                  className="bg-accent-teal hover:bg-accent-teal/90 text-white shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-3"
                 >
                   <Upload className="w-5 h-5 mr-2" />
                   Upload & Analyze ({pendingCount})

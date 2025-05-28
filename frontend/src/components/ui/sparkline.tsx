@@ -27,10 +27,10 @@ const Sparkline: React.FC<SparklineProps> = ({
   }).join(' ')
 
   const colorClasses = {
-    green: 'stroke-green-500',
-    red: 'stroke-red-500',
-    blue: 'stroke-blue-500',
-    yellow: 'stroke-yellow-500'
+    green: 'stroke-success',
+    red: 'stroke-error',
+    blue: 'stroke-primary',
+    yellow: 'stroke-warning'
   }
 
   const trend = data[data.length - 1] > data[0] ? 'up' : 'down'
@@ -52,7 +52,7 @@ const Sparkline: React.FC<SparklineProps> = ({
           className={colorClasses[color]}
         />
       </svg>
-      <span className={`text-xs ${trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+      <span className={`text-xs ${trend === 'up' ? 'text-success' : 'text-error'}`}>
         {TrendIcon}
       </span>
     </div>

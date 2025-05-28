@@ -11,15 +11,14 @@ interface HeatmapData {
 interface HeatmapProps {
   data: HeatmapData[]
   className?: string
-  isDarkMode?: boolean
 }
 
-const Heatmap: React.FC<HeatmapProps> = ({ data, className, isDarkMode = false }) => {
+const Heatmap: React.FC<HeatmapProps> = ({ data, className }) => {
   const getCoverageColor = (coverage: number) => {
-    if (coverage >= 90) return isDarkMode ? 'bg-green-600' : 'bg-green-500'
-    if (coverage >= 70) return isDarkMode ? 'bg-yellow-600' : 'bg-yellow-500'
-    if (coverage >= 50) return isDarkMode ? 'bg-orange-600' : 'bg-orange-500'
-    return isDarkMode ? 'bg-red-600' : 'bg-red-500'
+    if (coverage >= 90) return 'bg-success'
+    if (coverage >= 70) return 'bg-warning'
+    if (coverage >= 50) return 'bg-info'
+    return 'bg-error'
   }
 
   const getCoverageText = (coverage: number) => {
@@ -29,19 +28,13 @@ const Heatmap: React.FC<HeatmapProps> = ({ data, className, isDarkMode = false }
     return 'Poor'
   }
 
-  const textClasses = isDarkMode ? 'text-slate-300' : 'text-gray-700'
-  const mutedTextClasses = isDarkMode ? 'text-slate-500' : 'text-gray-500'
-
   return (
     <div className={cn('space-y-3', className)}>
       <div className="grid grid-cols-1 gap-2">
         {data.map((item, index) => (
           <div 
             key={index}
-            className={cn(
-              'flex items-center justify-between p-3 rounded-lg border',
-              isDarkMode ? 'border-slate-700 bg-slate-800/50' : 'border-gray-200 bg-gray-50'
-            )}
+            className="flex items-center justify-between p-3 rounded-lg border border-border bg-surface-alt"
           >
             <div className="flex items-center space-x-3 flex-1">
               <div 
@@ -53,18 +46,18 @@ const Heatmap: React.FC<HeatmapProps> = ({ data, className, isDarkMode = false }
               />
               <div className="flex-1">
                 <div className="flex items-center justify-between">
-                  <span className={`text-sm font-medium ${textClasses}`}>
+                  <span className="text-sm font-medium text-primary">
                     {item.category}
                   </span>
-                  <span className={`text-xs ${mutedTextClasses}`}>
+                  <span className="text-xs text-muted">
                     {item.documents} docs
                   </span>
                 </div>
                 <div className="flex items-center justify-between mt-1">
-                  <span className={`text-xs ${mutedTextClasses}`}>
+                  <span className="text-xs text-muted">
                     {getCoverageText(item.coverage)} ({item.coverage}%)
                   </span>
-                  <span className={`text-xs ${mutedTextClasses}`}>
+                  <span className="text-xs text-muted">
                     {new Date(item.lastUpdated).toLocaleDateString()}
                   </span>
                 </div>
@@ -75,24 +68,24 @@ const Heatmap: React.FC<HeatmapProps> = ({ data, className, isDarkMode = false }
       </div>
       
       {/* Legend */}
-      <div className="flex items-center justify-between text-xs pt-2 border-t">
-        <span className={mutedTextClasses}>Coverage:</span>
+      <div className="flex items-center justify-between text-xs pt-2 border-t border-border">
+        <span className="text-muted">Coverage:</span>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1">
-            <div className={`w-2 h-2 rounded ${isDarkMode ? 'bg-red-600' : 'bg-red-500'}`} />
-            <span className={mutedTextClasses}>Poor</span>
+            <div className="w-2 h-2 rounded bg-error" />
+            <span className="text-muted">Poor</span>
           </div>
           <div className="flex items-center space-x-1">
-            <div className={`w-2 h-2 rounded ${isDarkMode ? 'bg-orange-600' : 'bg-orange-500'}`} />
-            <span className={mutedTextClasses}>Fair</span>
+            <div className="w-2 h-2 rounded bg-info" />
+            <span className="text-muted">Fair</span>
           </div>
           <div className="flex items-center space-x-1">
-            <div className={`w-2 h-2 rounded ${isDarkMode ? 'bg-yellow-600' : 'bg-yellow-500'}`} />
-            <span className={mutedTextClasses}>Good</span>
+            <div className="w-2 h-2 rounded bg-warning" />
+            <span className="text-muted">Good</span>
           </div>
           <div className="flex items-center space-x-1">
-            <div className={`w-2 h-2 rounded ${isDarkMode ? 'bg-green-600' : 'bg-green-500'}`} />
-            <span className={mutedTextClasses}>Excellent</span>
+            <div className="w-2 h-2 rounded bg-success" />
+            <span className="text-muted">Excellent</span>
           </div>
         </div>
       </div>

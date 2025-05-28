@@ -3,15 +3,13 @@ import { cn } from '../../lib/utils'
 
 interface SkeletonProps {
   className?: string
-  isDarkMode?: boolean
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({ className, isDarkMode = false }) => {
+const Skeleton: React.FC<SkeletonProps> = ({ className }) => {
   return (
     <div 
       className={cn(
-        'animate-pulse rounded',
-        isDarkMode ? 'bg-slate-700' : 'bg-gray-200',
+        'animate-pulse rounded bg-surface-alt',
         className
       )}
     />
@@ -19,49 +17,42 @@ const Skeleton: React.FC<SkeletonProps> = ({ className, isDarkMode = false }) =>
 }
 
 // Predefined skeleton components for common use cases
-export const SkeletonCard: React.FC<{ isDarkMode?: boolean }> = ({ isDarkMode = false }) => (
-  <div className={cn(
-    'p-6 rounded-lg border',
-    isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
-  )}>
+export const SkeletonCard: React.FC = () => (
+  <div className="p-6 rounded-lg border border-border bg-surface">
     <div className="space-y-3">
-      <Skeleton className="h-4 w-3/4" isDarkMode={isDarkMode} />
-      <Skeleton className="h-3 w-full" isDarkMode={isDarkMode} />
-      <Skeleton className="h-3 w-2/3" isDarkMode={isDarkMode} />
+      <Skeleton className="h-4 w-3/4" />
+      <Skeleton className="h-3 w-full" />
+      <Skeleton className="h-3 w-2/3" />
     </div>
   </div>
 )
 
-export const SkeletonList: React.FC<{ items?: number; isDarkMode?: boolean }> = ({ 
-  items = 3, 
-  isDarkMode = false 
+export const SkeletonList: React.FC<{ items?: number }> = ({ 
+  items = 3
 }) => (
   <div className="space-y-4">
     {Array.from({ length: items }).map((_, i) => (
       <div key={i} className="flex items-center space-x-4">
-        <Skeleton className="h-12 w-12 rounded-full" isDarkMode={isDarkMode} />
+        <Skeleton className="h-12 w-12 rounded-full" />
         <div className="space-y-2 flex-1">
-          <Skeleton className="h-4 w-3/4" isDarkMode={isDarkMode} />
-          <Skeleton className="h-3 w-1/2" isDarkMode={isDarkMode} />
+          <Skeleton className="h-4 w-3/4" />
+          <Skeleton className="h-3 w-1/2" />
         </div>
       </div>
     ))}
   </div>
 )
 
-export const SkeletonMetricCard: React.FC<{ isDarkMode?: boolean }> = ({ isDarkMode = false }) => (
-  <div className={cn(
-    'p-6 rounded-lg border',
-    isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
-  )}>
+export const SkeletonMetricCard: React.FC = () => (
+  <div className="p-6 rounded-lg border border-border bg-surface">
     <div className="flex items-center justify-between mb-2">
-      <Skeleton className="h-4 w-24" isDarkMode={isDarkMode} />
-      <Skeleton className="h-4 w-4 rounded" isDarkMode={isDarkMode} />
+      <Skeleton className="h-4 w-24" />
+      <Skeleton className="h-4 w-4 rounded" />
     </div>
-    <Skeleton className="h-8 w-16 mb-2" isDarkMode={isDarkMode} />
+    <Skeleton className="h-8 w-16 mb-2" />
     <div className="flex items-center justify-between">
-      <Skeleton className="h-3 w-20" isDarkMode={isDarkMode} />
-      <Skeleton className="h-4 w-12" isDarkMode={isDarkMode} />
+      <Skeleton className="h-3 w-20" />
+      <Skeleton className="h-4 w-12" />
     </div>
   </div>
 )

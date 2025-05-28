@@ -1,0 +1,115 @@
+:root {
+  /* Light Mode - Monochrome */
+  --color-bg:           #FFFFFF;
+  --color-surface:      #F8F9FA;
+  --color-surface-alt:  #F1F3F4;
+  --color-divider:      #E5E7EB;
+  --color-border:       #D1D5DB;
+  --color-border-strong:#9CA3AF;
+  --color-primary:      #000000;
+  --color-secondary:    #374151;
+  --color-muted:        #6B7280;
+  --color-subtle:       #9CA3AF;
+  --color-placeholder:  #9CA3AF;
+  --color-disabled:     #D1D5DB;
+  --color-inverse:      #FFFFFF;
+  
+  /* Interactive states */
+  --color-hover-bg:     #F3F4F6;
+  --color-hover-border: #9CA3AF;
+  --color-active-bg:    #E5E7EB;
+  --color-focus-ring:   #D1D5DB;
+  
+  /* Status colors - monochrome variants */
+  --color-success:      #000000;
+  --color-success-bg:   #F3F4F6;
+  --color-warning:      #374151;
+  --color-warning-bg:   #F9FAFB;
+  --color-error:        #000000;
+  --color-error-bg:     #F3F4F6;
+  --color-info:         #374151;
+  --color-info-bg:      #F8F9FA;
+  
+  /* Shadows */
+  --shadow-sm:          0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md:          0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:          0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Strategic accent colors */
+  --color-accent-primary: #6366f1;
+  --color-accent-secondary: #8b5cf6;
+  --color-accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --color-accent-teal: #1ABC9C;
+  
+  /* Category accent colors (subtle) */
+  --color-category-gdpr: #3b82f6;
+  --color-category-sox: #8b5cf6;
+  --color-category-hipaa: #06b6d4;
+  --color-category-pci: #10b981;
+  --color-category-iso: #f59e0b;
+  --color-category-ccpa: #ef4444;
+  
+  /* Alert background colors (very subtle) */
+  --color-alert-success-bg: rgba(16, 185, 129, 0.05);
+  --color-alert-warning-bg: rgba(245, 158, 11, 0.05);
+  --color-alert-error-bg: rgba(239, 68, 68, 0.05);
+  --color-alert-info-bg: rgba(59, 130, 246, 0.05);
+}
+
+[data-theme="dark"] {
+  /* Dark Mode - Monochrome */
+  --color-bg:           #000000;
+  --color-surface:      #111111;
+  --color-surface-alt:  #1A1A1A;
+  --color-divider:      #333333;
+  --color-border:       #404040;
+  --color-border-strong:#666666;
+  --color-primary:      #FFFFFF;
+  --color-secondary:    #E5E5E5;
+  --color-muted:        #A3A3A3;
+  --color-subtle:       #737373;
+  --color-placeholder:  #737373;
+  --color-disabled:     #404040;
+  --color-inverse:      #000000;
+  
+  /* Interactive states */
+  --color-hover-bg:     #1A1A1A;
+  --color-hover-border: #666666;
+  --color-active-bg:    #333333;
+  --color-focus-ring:   #404040;
+  
+  /* Status colors - monochrome variants */
+  --color-success:      #FFFFFF;
+  --color-success-bg:   #1A1A1A;
+  --color-warning:      #E5E5E5;
+  --color-warning-bg:   #111111;
+  --color-error:        #FFFFFF;
+  --color-error-bg:     #1A1A1A;
+  --color-info:         #E5E5E5;
+  --color-info-bg:      #111111;
+  
+  /* Shadows */
+  --shadow-sm:          0 1px 2px 0 rgb(255 255 255 / 0.05);
+  --shadow-md:          0 4px 6px -1px rgb(255 255 255 / 0.1), 0 2px 4px -2px rgb(255 255 255 / 0.1);
+  --shadow-lg:          0 10px 15px -3px rgb(255 255 255 / 0.1), 0 4px 6px -4px rgb(255 255 255 / 0.1);
+
+  /* Strategic accent colors (slightly muted) */
+  --color-accent-primary: #5b5bd6;
+  --color-accent-secondary: #7c3aed;
+  --color-accent-gradient: linear-gradient(135deg, #5b5bd6, #7c3aed);
+  --color-accent-teal: #16A085;
+  
+  /* Category accent colors (muted for dark mode) */
+  --color-category-gdpr: #2563eb;
+  --color-category-sox: #7c3aed;
+  --color-category-hipaa: #0891b2;
+  --color-category-pci: #059669;
+  --color-category-iso: #d97706;
+  --color-category-ccpa: #dc2626;
+  
+  /* Alert background colors (very subtle for dark mode) */
+  --color-alert-success-bg: rgba(5, 150, 105, 0.1);
+  --color-alert-warning-bg: rgba(217, 119, 6, 0.1);
+  --color-alert-error-bg: rgba(220, 38, 38, 0.1);
+  --color-alert-info-bg: rgba(37, 99, 235, 0.1);
+} 

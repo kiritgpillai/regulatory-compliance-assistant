@@ -1,24 +1,131 @@
+@import './styles/colors.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   * {
-    border-color: theme('colors.gray.200');
+    border-color: theme('colors.border');
   }
   
   body {
-    @apply bg-white text-gray-900;
+    @apply bg-bg text-primary;
+    font-family: 'Titillium Web', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  
+  body::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+  
+  body::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors;
+  /* Semantic component classes using CSS variables */
+  .card {
+    @apply bg-surface border border-border shadow-md rounded-lg;
   }
   
-  .card {
-    @apply bg-white border border-gray-200 rounded-lg shadow-sm;
+  .sidebar {
+    @apply bg-surface border-border shadow-sm;
+  }
+  
+  .button-primary {
+    @apply bg-primary text-inverse border border-primary hover:bg-secondary hover:border-secondary transition-all duration-200;
+  }
+  
+  .button-secondary {
+    @apply bg-surface text-primary border border-border hover:bg-hover-bg hover:border-hover-border transition-all duration-200;
+  }
+  
+  .button-ghost {
+    @apply text-primary hover:bg-hover-bg transition-all duration-200;
+  }
+  
+  .input {
+    @apply bg-bg border border-border text-primary placeholder:text-placeholder focus:border-border-strong focus:ring-2 focus:ring-focus-ring;
+  }
+  
+  .accent {
+    @apply bg-primary text-inverse;
+  }
+  
+  .hover-effect {
+    @apply hover:bg-hover-bg hover:shadow-sm transition-all duration-200;
+  }
+  
+  /* Custom scrollbar styles */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+    background-clip: content-box;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  
+  /* Thin scrollbar variant for smaller areas */
+  .custom-scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  
+  .custom-scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .custom-scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+    border: 1px solid transparent;
+    background-clip: content-box;
+  }
+  
+  .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+    background-clip: content-box;
   }
 } 

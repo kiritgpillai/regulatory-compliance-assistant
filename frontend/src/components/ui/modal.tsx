@@ -8,7 +8,6 @@ interface ModalProps {
   title?: string
   children: React.ReactNode
   size?: 'sm' | 'md' | 'lg' | 'xl'
-  isDarkMode?: boolean
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -16,8 +15,7 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   children,
-  size = 'md',
-  isDarkMode = false
+  size = 'md'
 }) => {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -46,10 +44,6 @@ const Modal: React.FC<ModalProps> = ({
     xl: 'max-w-4xl'
   }
 
-  const modalClasses = isDarkMode 
-    ? 'bg-slate-800 border-slate-700 text-white' 
-    : 'bg-white border-gray-200 text-gray-900'
-
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -61,25 +55,18 @@ const Modal: React.FC<ModalProps> = ({
       {/* Modal */}
       <div 
         className={cn(
-          'relative w-full border rounded-lg shadow-xl',
-          sizeClasses[size],
-          modalClasses
+          'relative w-full border border-border rounded-lg shadow-xl bg-surface text-primary',
+          sizeClasses[size]
         )}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         {title && (
-          <div className={cn(
-            'flex items-center justify-between p-4 border-b',
-            isDarkMode ? 'border-slate-700' : 'border-gray-200'
-          )}>
-            <h2 className="text-lg font-semibold">{title}</h2>
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <h2 className="text-lg font-semibold text-primary">{title}</h2>
             <button
               onClick={onClose}
-              className={cn(
-                'p-1 rounded hover:bg-opacity-10',
-                isDarkMode ? 'hover:bg-white' : 'hover:bg-black'
-              )}
+              className="p-1 rounded text-muted hover:text-primary hover:bg-hover-bg"
             >
               <X className="w-5 h-5" />
             </button>
@@ -87,7 +74,7 @@ const Modal: React.FC<ModalProps> = ({
         )}
         
         {/* Content */}
-        <div className="p-4 max-h-96 overflow-y-auto">
+        <div className="p-4 max-h-96 overflow-y-auto custom-scrollbar-thin">
           {children}
         </div>
       </div>

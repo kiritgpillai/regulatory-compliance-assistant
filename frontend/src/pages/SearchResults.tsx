@@ -64,7 +64,7 @@ const SearchResults: React.FC = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Regulatory Search</h1>
           <p className="text-gray-600 mt-2">
-            Search through regulatory compliance requirements and guidelines
+            Search through compliance requirements and guidelines
           </p>
         </div>
 

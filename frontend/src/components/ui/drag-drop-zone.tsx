@@ -7,7 +7,6 @@ interface DragDropZoneProps {
   accept?: string
   multiple?: boolean
   className?: string
-  isDarkMode?: boolean
   compact?: boolean
 }
 
@@ -16,7 +15,6 @@ const DragDropZone: React.FC<DragDropZoneProps> = ({
   accept = '.pdf,.doc,.docx,.txt,.zip',
   multiple = true,
   className,
-  isDarkMode = false,
   compact = false
 }) => {
   const [isDragOver, setIsDragOver] = useState(false)
@@ -66,17 +64,11 @@ const DragDropZone: React.FC<DragDropZoneProps> = ({
   const baseClasses = cn(
     'border-2 border-dashed rounded-lg transition-all duration-200 cursor-pointer relative overflow-hidden',
     isDragOver 
-      ? 'border-slate-500 bg-slate-50 dark:bg-slate-800/50 scale-[1.02]' 
-      : isDarkMode 
-        ? 'border-slate-600 hover:border-slate-500 hover:bg-slate-800/50' 
-        : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50',
+      ? 'border-border-strong bg-hover-bg scale-[1.02]' 
+      : 'border-border hover:border-border-strong hover:bg-hover-bg',
     compact ? 'p-4' : 'p-8',
     className
   )
-
-  const textClasses = isDarkMode ? 'text-slate-300' : 'text-gray-600'
-  const mutedTextClasses = isDarkMode ? 'text-slate-500' : 'text-gray-500'
-  const accentTextClasses = isDarkMode ? 'text-slate-300' : 'text-gray-700'
 
   return (
     <div
@@ -109,10 +101,10 @@ const DragDropZone: React.FC<DragDropZoneProps> = ({
       
       {/* Drag overlay */}
       {isDragOver && (
-        <div className="absolute inset-0 bg-slate-500/10 border-2 border-slate-500 border-dashed rounded-lg flex items-center justify-center z-10">
+        <div className="absolute inset-0 bg-hover-bg border-2 border-border-strong border-dashed rounded-lg flex items-center justify-center z-10">
           <div className="text-center">
-            <Upload className={`w-12 h-12 mx-auto mb-2 ${accentTextClasses}`} />
-            <p className={`text-lg font-medium ${accentTextClasses}`}>
+            <Upload className="w-12 h-12 mx-auto mb-2 text-primary" />
+            <p className="text-lg font-medium text-primary">
               Drop files here
             </p>
           </div>
@@ -122,29 +114,29 @@ const DragDropZone: React.FC<DragDropZoneProps> = ({
       <div className="flex flex-col items-center justify-center text-center">
         {compact ? (
           <>
-            <Upload className={`w-6 h-6 mb-2 ${textClasses}`} />
-            <p className={`text-sm font-medium ${textClasses}`}>
+            <Upload className="w-6 h-6 mb-2 text-secondary" />
+            <p className="text-sm font-medium text-secondary">
               Upload Files
             </p>
           </>
         ) : (
           <>
             <div className="flex space-x-3 mb-6">
-              <div className={`p-3 rounded-full ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
-                <FileText className={`w-6 h-6 ${textClasses}`} />
+              <div className="p-3 rounded-full bg-surface-alt">
+                <FileText className="w-6 h-6 text-secondary" />
               </div>
-              <div className={`p-3 rounded-full ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
-                <Archive className={`w-6 h-6 ${textClasses}`} />
+              <div className="p-3 rounded-full bg-surface-alt">
+                <Archive className="w-6 h-6 text-secondary" />
               </div>
-              <div className={`p-3 rounded-full ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
-                <FolderOpen className={`w-6 h-6 ${textClasses}`} />
+              <div className="p-3 rounded-full bg-surface-alt">
+                <FolderOpen className="w-6 h-6 text-secondary" />
               </div>
             </div>
             
-            <p className={`text-xl font-medium mb-2 ${textClasses}`}>
+            <p className="text-xl font-medium mb-2 text-secondary">
               Drag & drop files or folders here
             </p>
-            <p className={`text-sm ${mutedTextClasses} mb-4`}>
+            <p className="text-sm text-muted mb-4">
               Supports PDF, DOC, DOCX, TXT, ZIP files up to 50MB each
             </p>
             
@@ -155,11 +147,7 @@ const DragDropZone: React.FC<DragDropZoneProps> = ({
                   e.stopPropagation()
                   handleFileClick()
                 }}
-                className={`px-4 py-2 rounded-lg border transition-colors ${
-                  isDarkMode 
-                    ? 'border-slate-600 text-slate-300 hover:bg-slate-700' 
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
+                className="px-4 py-2 rounded-lg border border-border text-secondary hover:bg-hover-bg transition-colors"
               >
                 <Plus className="w-4 h-4 inline mr-2" />
                 Browse Files
@@ -171,18 +159,14 @@ const DragDropZone: React.FC<DragDropZoneProps> = ({
                   e.stopPropagation()
                   handleFolderClick()
                 }}
-                className={`px-4 py-2 rounded-lg border transition-colors ${
-                  isDarkMode 
-                    ? 'border-slate-600 text-slate-300 hover:bg-slate-700' 
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
+                className="px-4 py-2 rounded-lg border border-border text-secondary hover:bg-hover-bg transition-colors"
               >
                 <FolderOpen className="w-4 h-4 inline mr-2" />
                 Browse Folder
               </button>
             </div>
             
-            <p className={`text-xs mt-3 ${mutedTextClasses}`}>
+            <p className="text-xs mt-3 text-muted">
               {multiple ? 'Multiple files and folders supported' : 'Single file only'}
             </p>
           </>

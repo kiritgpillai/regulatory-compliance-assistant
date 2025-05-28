@@ -57,21 +57,19 @@ function AppContent() {
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light')
   }, [isDarkMode])
 
-  const themeClasses = isDarkMode 
-    ? 'bg-slate-900 text-white' 
-    : 'bg-gray-50 text-gray-900'
-
   // Only show sidebar toggle on dashboard page
   const showSidebarToggle = location.pathname === '/'
 
   return (
-    <div className={`min-h-screen ${themeClasses}`}>
+    <div 
+      className="min-h-screen bg-bg text-primary"
+      data-theme={isDarkMode ? "dark" : "light"}
+    >
       <Header 
         ref={headerRef}
         onSearch={handleSearch}
         onToggleSidebar={showSidebarToggle ? toggleSidebar : undefined}
         isSidebarCollapsed={isSidebarCollapsed}
-        isDarkMode={isDarkMode}
         onToggleTheme={toggleTheme}
         systemHealth={true}
       />
@@ -81,7 +79,6 @@ function AppContent() {
           element={
             <Dashboard 
               searchQuery={searchQuery}
-              isDarkMode={isDarkMode}
               isSidebarCollapsed={isSidebarCollapsed}
               onToggleSidebar={toggleSidebar}
               onToggleTheme={toggleTheme}
@@ -91,12 +88,7 @@ function AppContent() {
         <Route path="/search" element={<SearchResults />} />
         <Route 
           path="/upload" 
-          element={
-            <DocumentUpload 
-              isDarkMode={isDarkMode}
-              onToggleTheme={toggleTheme}
-            />
-          } 
+          element={<DocumentUpload />} 
         />
       </Routes>
     </div>
