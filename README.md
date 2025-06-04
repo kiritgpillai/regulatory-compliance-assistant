@@ -85,11 +85,6 @@ npm run backend
 npm run dev
 ```
 
-The application will be available at:
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:8000
-- API Documentation: http://localhost:8000/docs
-
 > **For detailed setup instructions for team members, see [SETUP.md](SETUP.md)**
 
 ## 📁 Project Structure
@@ -223,62 +218,6 @@ black .             # Format code
 flake8 .            # Lint code
 ```
 
-### Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-# API Configuration
-API_HOST=localhost
-API_PORT=8000
-DEBUG=true
-
-# Database Configuration
-DATABASE_URL=sqlite:///./compliance.db
-
-# AI/ML Configuration
-PINECONE_API_KEY=your_pinecone_api_key
-PINECONE_ENVIRONMENT=your_pinecone_environment
-EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-
-# Security
-SECRET_KEY=your_secret_key_here
-ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-
-- Follow TypeScript best practices
-- Maintain accessibility standards (WCAG 2.1 AA)
-- Write comprehensive tests for new features
-- Update documentation for API changes
-- Use semantic commit messages
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-For support, please:
-- Open an issue on GitHub for bugs or feature requests
-- Check the documentation for common questions
-- Contact the development team for enterprise support
-
-## 🎯 Roadmap
-
-- [ ] Advanced AI compliance analysis
-- [ ] Integration with external regulatory APIs
-- [ ] Mobile application
-- [ ] Advanced reporting and analytics
-- [ ] Multi-tenant support
-- [ ] SSO integration
-
